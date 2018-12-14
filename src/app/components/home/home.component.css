@@ -1,0 +1,12 @@
+
+@font-face {
+  font-family: 'Avenir Next Reg';
+  src: url("../../../assets/fonts/AvenirNextLTPro-Regular.otf") format('truetype');
+}
+  
+.column {
+    min-height: 200px;
+    color: #000000;
+    background: #ffffff;
+    margin-top: 50px
+}

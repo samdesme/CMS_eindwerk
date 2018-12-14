@@ -1,0 +1,12 @@
+/* You can add global styles to this file, and also import other style files */
+@font-face {
+    font-family: 'Avenir Next Reg';
+    src: url("assets/fonts/AvenirNextLTPro-Regular.otf") format('truetype');
+  }
+
+html,body {  
+    font-family: 'Avenir Next Reg', 'Open Sans', serif;
+    background:  #876BD1;
+    padding-top: 50px
+  }
+
