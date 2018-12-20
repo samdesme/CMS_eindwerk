@@ -1,0 +1,35 @@
+<div class="columns is-mobile is-centered">
+    <div *ngIf="profile" class="column is-three-quarters-mobile is-two-thirds-tablet is-half-desktop is-one-third-widescreen is-one-third-fullhd ">
+
+        
+<div class="form">
+        <div class="field">
+          <label class="label">Name</label>
+          <div class="control">
+            <input class="input" type="text" placeholder="Text input" value="{{profile.attributes.field_username}}" #name>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="label">Profielfoto</label>
+          <div class="control">
+              <input type="file" (change)="onFileChanged($event)">
+              <button (click)="onUpload()">Upload!</button>
+          </div>
+        </div>
+
+        <div class="field">
+            <label class="label">Geboortedatum</label>
+            <div class="control">
+              <input class="input" type="date" placeholder="dd-mm-yyyy">
+            </div>
+          </div>
+
+        <a (click)="editProfile(name)" class="button is-outlined is-rounded is-medium btnCreate">OPSLAAN</a>
+
+    </div>
+    
+  </div>
+  </div>
+
+  

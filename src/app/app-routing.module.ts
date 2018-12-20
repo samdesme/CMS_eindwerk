@@ -3,12 +3,14 @@ import { RouterModule, Routes } from '@angular/router';
 
 
 import { LoginComponent } from './components/auth/login.component';
-import { HomeComponent } from './components/home/home.component';
+import { ProfileComponent } from './components/profile/profile.component';
+import { ProfileCreateComponent } from './components/profile/create/profile-create.component';
 
 
 const routes: Routes = [
-  { path: '', redirectTo: '/', pathMatch: 'full' },
-  { path: '', component: HomeComponent},
+  { path: '', redirectTo: '/profile', pathMatch: 'full' },
+  { path: 'profile', component: ProfileComponent},
+  { path: 'profile/create/:id', component: ProfileCreateComponent },
   { path: 'login', component: LoginComponent },
   
 
