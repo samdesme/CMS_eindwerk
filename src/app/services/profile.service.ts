@@ -26,6 +26,8 @@ export class ProfileService {
     }
   }
 
+
+
   public async getProfile<T>(id: string): Promise<T> {
     try {
       const res = await axios.request<T>({

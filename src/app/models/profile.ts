@@ -6,4 +6,5 @@ export class Profile {
 
   export class Attributes {
     name: string;
+    revision_id;
   }

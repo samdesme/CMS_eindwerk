@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { Profile, Attributes } from '../../../models/profile';
 import { ProfileImg, ImgAttributes } from '../../../models/profile_picture';
+import { NewFile } from '../../../models/file';
 
 import { ProfileService } from './../../../services/profile.service';
 import { AuthService } from './../../../services/auth.service';
@@ -24,11 +25,12 @@ export class ProfileCreateComponent implements OnInit {
   public newProfile_picture: ProfileImg;
 
   public newProfile: Profile;
+  public newFile: NewFile;
+
   id = this.route.snapshot.paramMap.get('id');
   selectedFile: File;
   token;
   revision_id;
-
 
   constructor(
     private profileService: ProfileService,
@@ -47,9 +49,6 @@ export class ProfileCreateComponent implements OnInit {
     this.getName();
     this.getImg()
     this.getToken();
-
-  
- 
   
   }
 
@@ -57,29 +56,7 @@ export class ProfileCreateComponent implements OnInit {
     this.selectedFile = event.target.files[0]
   }
 
-  onUpload() {
  
-
-      // const uploadData = new FormData();
-      // uploadData.append('myFile', this.selectedFile, this.selectedFile.name);
-
-      const httpOptions = {
-        headers: new HttpHeaders({
-        'Content-Type':  'application/octet-stream',
-        'Content-Disposition': `file; filename="${this.selectedFile.name}"`,
-        'Authorization': 'Basic ' + "cm9vdDpyb290"
-       })
-   };
-
-   
-    this.http.post('http://localhost:8888/file/upload/profile/user/field_profile_picture?_format=json', this.selectedFile, httpOptions)
-    .subscribe(event => {
-      console.log(event);
-    });
-
-    
-
-  }
 
   public async getToken(): Promise<void> {
     try {
@@ -115,63 +92,87 @@ export class ProfileCreateComponent implements OnInit {
 
 
 
-  public async patchImg(): Promise<void> {
-    
+  public  postFile(strName) {
+    let rev_id;
     try {
-      const res = await this.profileService.getProfileImg<JsonObject>("a87cc773-bef4-4c56-8ad0-0c6d268eaff2");
-      this.newProfile_picture = res.data;
-    this.revision_id = this.newProfile_picture.attributes.drupal_internal__fid;
-      console.log(this.newProfile_picture.attributes.drupal_internal__fid);
 
-      const httpOptionsPatch = {
+
+      const httpOptions = {
         headers: new HttpHeaders({
-        'Content-Type':  'application/json',
+        'Content-Type':  'application/octet-stream',
+        'Content-Disposition': `file; filename="${this.selectedFile.name}"`,
         'Authorization': 'Basic ' + "cm9vdDpyb290"
        })
-    };
-      
-      let request : any = 
-      {
-        "type": "user",
-        "field_profile_picture": [
-          {
-            "target_id": this.revision_id
-          }
-        ]
-      }
+   };
   
-      this.http.patch('http://localhost:8888/profile/1?_format=json', request, httpOptionsPatch)
-      .subscribe(event => {
-        console.log(event);
-      });
+    this.http.post<NewFile>('http://localhost:8888/file/upload/profile/user/field_profile_picture?_format=json', this.selectedFile, httpOptions)
+    .subscribe(event => {
+      rev_id = event.fid[0]["value"];
+      console.log("NewFile name: ",strName);
+      this.patchUser(rev_id, strName)
+    });
+
 
     } catch ( error ) {
       console.error( error );
     }
 
-    return this.revision_id;
    
   }
 
-  public async editProfile(name): Promise<void> {
+  public patchUser(rev_id, strName){
 
+    console.log("name : ",strName);
+    const httpOptionsPatch = {
+      headers: new HttpHeaders({
+      'Content-Type':  'application/json',
+      'Authorization': 'Basic ' + "cm9vdDpyb290"
+     })
+  };
+    
+    let request : any = 
+    {
+      "type": "user",
+      "field_profile_picture": [
+        {
+        "target_id": rev_id
+        }
+      ],
+      "field_username": [
+        {
+        "value": strName
+        }
+      ]
+    }
+
+    this.http.patch('http://localhost:8888/profile/1?_format=json', request, httpOptionsPatch)
+    .subscribe(event => {
+      console.log(event);
+      this.router.navigate(["profile"]);
+    });
+  }
+
+  public editProfile(name){
+    let strName = name.value
     try {
-   
-      this.onUpload();
-      this.patchImg();
 
-      // Data for request
+      /* this.uploadFile();
+
       const patchObject = new JsonObject;
       this.newProfile = new Profile;
       this.newProfile.id = this.id;
       this.newProfile.attributes = new Attributes;
       this.newProfile.attributes.name = name.value;
+      this.newProfile.attributes.revision_id = this.revision_id;
       
       patchObject.data = this.newProfile;
       console.log(patchObject);
-      const jsonResponse = await this.profileService.editProfile<JsonObject>(this.id, patchObject);
-      console.log(jsonResponse);
-      this.router.navigate([`profile`]);
+      const jsonResponse = this.profileService.editProfile<JsonObject>(this.id, patchObject);
+      console.log(jsonResponse); */
+
+
+      this.postFile(strName);
+      
     } catch ( error ) {
       console.error( error );
     }
