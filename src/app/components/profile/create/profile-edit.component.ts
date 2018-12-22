@@ -13,13 +13,13 @@ import { Headers, RequestOptions, Http, Response } from '@angular/http';
 import { HttpHeaders } from '@angular/common/http';
 
 @Component({
-  selector: 'app-profile-create',
-  templateUrl: './profile-create.component.html',
-  styleUrls: ['./profile-create.component.scss'],
+  selector: 'app-profile-edit',
+  templateUrl: './profile-edit.component.html',
+  styleUrls: ['./profile-edit.component.scss'],
 
   
 })
-export class ProfileCreateComponent implements OnInit {
+export class ProfileEditComponent implements OnInit {
   public profile: Profile[];
   public profile_picture: ProfileImg[];
   public newProfile_picture: ProfileImg;
@@ -27,11 +27,14 @@ export class ProfileCreateComponent implements OnInit {
   public newProfile: Profile;
   public newFile: NewFile;
 
+  fileName: string = '';
+  msg: string = '';
+
+
   id = this.route.snapshot.paramMap.get('id');
   selectedFile: File;
   token;
-  revision_id;
-
+  
   constructor(
     private profileService: ProfileService,
     private authService: AuthService,
@@ -49,14 +52,23 @@ export class ProfileCreateComponent implements OnInit {
     this.getName();
     this.getImg()
     this.getToken();
-  
+   
+
   }
 
   onFileChanged(event) {
-    this.selectedFile = event.target.files[0]
+    this.selectedFile = event.target.files[0];
+    this.changeName(this.selectedFile.name);
   }
 
- 
+  changeName(string):void{
+    this.fileName = string;
+   }
+
+   changeMsg(string):void{
+    this.msg = string;
+   }
+  
 
   public async getToken(): Promise<void> {
     try {
@@ -92,7 +104,7 @@ export class ProfileCreateComponent implements OnInit {
 
 
 
-  public  postFile(strName) {
+  public  postFile() {
     let rev_id;
     try {
 
@@ -108,8 +120,7 @@ export class ProfileCreateComponent implements OnInit {
     this.http.post<NewFile>('http://localhost:8888/file/upload/profile/user/field_profile_picture?_format=json', this.selectedFile, httpOptions)
     .subscribe(event => {
       rev_id = event.fid[0]["value"];
-      console.log("NewFile name: ",strName);
-      this.patchUser(rev_id, strName)
+      this.patchUserImg(rev_id)
     });
 
 
@@ -120,9 +131,41 @@ export class ProfileCreateComponent implements OnInit {
    
   }
 
-  public patchUser(rev_id, strName){
-
+  public patchUserInfo(strName){
     console.log("name : ",strName);
+    const httpOptionsPatch = {
+      headers: new HttpHeaders({
+      'Content-Type':  'application/json',
+      'Authorization': 'Basic ' + "cm9vdDpyb290"
+     })
+  };
+    
+    let request : any = 
+    {
+      "type": "user",
+      "field_username": [
+        {
+        "value": strName
+        }
+      ]
+    }
+
+    this.http.patch('http://localhost:8888/profile/1?_format=json', request, httpOptionsPatch)
+    .subscribe(event => {
+      console.log(event);
+      if (this.selectedFile != null){
+        this.postFile();
+
+      }
+      else{
+        this.router.navigate(["profile"]);
+
+      }
+    });
+  }
+
+  public patchUserImg(rev_id){
+
     const httpOptionsPatch = {
       headers: new HttpHeaders({
       'Content-Type':  'application/json',
@@ -137,11 +180,6 @@ export class ProfileCreateComponent implements OnInit {
         {
         "target_id": rev_id
         }
-      ],
-      "field_username": [
-        {
-        "value": strName
-        }
       ]
     }
 
@@ -149,6 +187,7 @@ export class ProfileCreateComponent implements OnInit {
     .subscribe(event => {
       console.log(event);
       this.router.navigate(["profile"]);
+
     });
   }
 
@@ -170,9 +209,17 @@ export class ProfileCreateComponent implements OnInit {
       const jsonResponse = this.profileService.editProfile<JsonObject>(this.id, patchObject);
       console.log(jsonResponse); */
 
-
-      this.postFile(strName);
       
+
+     if (strName != ""){
+      this.patchUserInfo(strName)
+
+     }
+     else
+     {
+      this.changeMsg("Vul de verplichte velden in!")
+     }
+
     } catch ( error ) {
       console.error( error );
     }

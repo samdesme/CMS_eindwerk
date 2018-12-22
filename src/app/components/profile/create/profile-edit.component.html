@@ -4,28 +4,40 @@
         
 <div class="form">
         <div class="field">
-          <label class="label">Name</label>
+          <label class="label">Naam*</label>
           <div class="control">
             <input class="input" type="text" placeholder="Text input" value="{{profile.attributes.field_username}}" #name>
           </div>
         </div>
 
         <div class="field">
-          <label class="label">Profielfoto</label>
-          <div class="control">
-              <input type="file" (change)="onFileChanged($event)">
-              <button (click)="onUpload()">Upload!</button>
+          <label class="label">Profielfoto veranderen</label>
+         <!--  <div class="control">
+              <input id="fileInput" type="file" (change)="onFileChanged($event)">
+          </div> -->
+
+          <div id="upload_button">
+              <label>
+                <input type="file" (change)="onFileChanged($event)">
+                <a>KIES BESTAND</a>
+              </label>
+
+              <p [innerHTML] = "fileName"></p>
+
           </div>
         </div>
 
+        
+
         <div class="field">
-            <label class="label">Geboortedatum</label>
+            <label class="label">Geboortedatum*</label>
             <div class="control">
               <input class="input" type="date" placeholder="dd-mm-yyyy">
             </div>
           </div>
 
         <a (click)="editProfile(name)" class="button is-outlined is-rounded is-medium btnCreate">OPSLAAN</a>
+        <p class="valMessage" [innerHTML] = "msg"></p>
 
     </div>
     

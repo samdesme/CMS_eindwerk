@@ -3,7 +3,8 @@ $black: #000000;
 $white: #ffffff;
 $black_16: rgba(0, 0, 0, 0.16);
 $purple: #876bd1;
-$color_cod_gray_10_approx: rgba(10,10,10,.1);
+$gray_op10: rgba(10,10,10,.1);
+$gray: rgb(155, 155, 155);
 //fonts
 $font_0: Avenir Next Reg;
 $font_1: Avenir Next Dem;
@@ -39,19 +40,26 @@ $url_1: url(../../../assets/fonts/AvenirNextLTPro-Demi.otf);
 .avatar {
 	width: 150px;
 	height: 150px;
-	margin: -75px auto 0 auto;
-	
-	img {
-		padding: 5px;
-		background: $white;
-		//Instead of the line below you could use @include border-radius($radius, $vertical-radius)
-		border-radius: 50%;
-		//Instead of the line below you could use @include box-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
-		box-shadow: 0 2px 3px $color_cod_gray_10_approx, 0 0 0 1px $color_cod_gray_10_approx;
-	}
+
+	margin: -75px auto 20px auto;
+
+
 }
 
-.btnCreate {
+#thumbnail {
+	height: 150px;
+
+	background-size: cover;
+    background-repeat: no-repeat;
+	background-position: 50% 50%;
+	
+	border-radius: 50%;
+	border: 5px #ffffff solid;
+	box-shadow: 0 2px 3px $gray_op10, 0 0 0 0px $gray_op10;
+
+}
+
+.btnPrimary {
 	font-family: $font_1;
 	border: solid 3px $purple;
 	color: $purple;
@@ -65,4 +73,19 @@ $url_1: url(../../../assets/fonts/AvenirNextLTPro-Demi.otf);
 	right: 0;
 	font-size: 1em;
 	margin: auto;
+}
+
+.btnEdit {
+
+	position: absolute;
+	top: 15px;
+	right: 15px;
+	
+
+}
+
+.icon {
+	color: $gray;
+	font-size: 20px;
+	
 }
