@@ -10,6 +10,7 @@ import { ProfileEditComponent } from './components/profile/create/profile-edit.c
 const routes: Routes = [
   { path: '', redirectTo: '/profile', pathMatch: 'full' },
   { path: 'profile', component: ProfileComponent},
+
   { path: 'profile/edit/:id', component: ProfileEditComponent },
   { path: 'login', component: LoginComponent },
   

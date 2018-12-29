@@ -7,14 +7,14 @@ import axios from 'axios';
 })
 export class AuthService {
 
-  public fetchURL = 'http://localhost:8888/rest/session';
+  public fetchURL = 'http://localhost:8888/oauth/token';
   constructor() {}
 
   public async getToken<T>(): Promise<T> {
     try {
       const res = await axios.request<T>({
         method: 'get',
-        url: `${this.fetchURL}/token`
+        url: `${this.fetchURL}`
       });
       return res.data;
     } catch (error) {

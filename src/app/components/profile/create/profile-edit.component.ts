@@ -5,12 +5,12 @@ import { NewFile } from '../../../models/file';
 
 import { ProfileService } from './../../../services/profile.service';
 import { AuthService } from './../../../services/auth.service';
+import { UserService } from "../../../services/user.service";
 
 import { JsonObject } from '../../../models/json';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { Headers, RequestOptions, Http, Response } from '@angular/http';
-import { HttpHeaders } from '@angular/common/http';
+import { HttpParams, HttpClient, HttpHeaders} from '@angular/common/http';
+import axios from 'axios';
 
 @Component({
   selector: 'app-profile-edit',
@@ -29,6 +29,7 @@ export class ProfileEditComponent implements OnInit {
 
   fileName: string = '';
   msg: string = '';
+  uid: string = '';
 
 
   id = this.route.snapshot.paramMap.get('id');
@@ -38,6 +39,8 @@ export class ProfileEditComponent implements OnInit {
   constructor(
     private profileService: ProfileService,
     private authService: AuthService,
+    private userService: UserService,
+
 
     private router: Router,
     private route: ActivatedRoute,
@@ -49,11 +52,8 @@ export class ProfileEditComponent implements OnInit {
 
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id');
-    this.getName();
-    this.getImg()
-    this.getToken();
-   
-
+    this.getUser();
+    this.getUsername();
   }
 
   onFileChanged(event) {
@@ -70,20 +70,9 @@ export class ProfileEditComponent implements OnInit {
    }
   
 
-  public async getToken(): Promise<void> {
+  public async getUsername(): Promise<void> {
     try {
-      const res =  await this.authService.getToken<String>();
-      this.token = res;
-      console.log(res);
-    } catch ( error ) {
-      console.error( error );
-    }
-    
-  }
-
-  public async getName(): Promise<void> {
-    try {
-      const res = await this.profileService.getProfile<JsonObject>(this.id);
+      const res = await this.profileService.getUser<JsonObject>(this.id);
       this.profile = res.data;
       console.log(this.profile);
     } catch ( error ) {
@@ -91,21 +80,21 @@ export class ProfileEditComponent implements OnInit {
     }
   }
 
-
-  public async getImg(): Promise<void> {
+  public async getUser(): Promise<void> {
     try {
-      const res = await this.profileService.getProfileImg<JsonObject>("a87cc773-bef4-4c56-8ad0-0c6d268eaff2");
-      this.profile_picture = res.data;
-      console.log(this.profile_picture);
+      const res = await this.profileService.getUser<JsonObject>(this.id);
+      this.uid = res.data["attributes"]["drupal_internal__uid"]
+  
+      console.log(this.uid);
+
     } catch ( error ) {
       console.error( error );
     }
   }
 
 
-
-  public  postFile() {
-    let rev_id;
+  public postFile() {
+ let uuid;
     try {
 
 
@@ -113,14 +102,22 @@ export class ProfileEditComponent implements OnInit {
         headers: new HttpHeaders({
         'Content-Type':  'application/octet-stream',
         'Content-Disposition': `file; filename="${this.selectedFile.name}"`,
-        'Authorization': 'Basic ' + "cm9vdDpyb290"
+        'Authorization': localStorage.getItem("access_token")
        })
    };
   
     this.http.post<NewFile>('http://localhost:8888/file/upload/profile/user/field_profile_picture?_format=json', this.selectedFile, httpOptions)
     .subscribe(event => {
-      rev_id = event.fid[0]["value"];
-      this.patchUserImg(rev_id)
+      uuid = event.fid[0]["value"];
+
+      this.refresh_token().then(response => {
+        if(response){
+          this.patchProfileImg(uuid)
+
+        } else {
+          console.log("error")
+        }
+      })
     });
 
 
@@ -132,44 +129,46 @@ export class ProfileEditComponent implements OnInit {
   }
 
   public patchUserInfo(strName){
+
     console.log("name : ",strName);
+
     const httpOptionsPatch = {
       headers: new HttpHeaders({
       'Content-Type':  'application/json',
-      'Authorization': 'Basic ' + "cm9vdDpyb290"
+      'Authorization': localStorage.getItem("access_token")
      })
   };
     
     let request : any = 
     {
-      "type": "user",
-      "field_username": [
+      "name": [
         {
         "value": strName
         }
       ]
     }
 
-    this.http.patch('http://localhost:8888/profile/1?_format=json', request, httpOptionsPatch)
+    this.http.patch(`http://localhost:8888/user/${this.uid}?_format=json`, request, httpOptionsPatch)
     .subscribe(event => {
       console.log(event);
-      if (this.selectedFile != null){
-        this.postFile();
-
-      }
-      else{
-        this.router.navigate(["profile"]);
-
-      }
+      this.refresh_token().then(response => {
+        if(response && this.selectedFile != null) {
+          this.postFile();
+        } else if (response) {
+          this.router.navigate(["profile"]);   
+        } else {
+         console.log("error")
+        }
+      });
     });
   }
 
-  public patchUserImg(rev_id){
+  public patchProfileImg(rev_id){
 
     const httpOptionsPatch = {
       headers: new HttpHeaders({
       'Content-Type':  'application/json',
-      'Authorization': 'Basic ' + "cm9vdDpyb290"
+      'Authorization': localStorage.getItem("access_token")
      })
   };
     
@@ -183,10 +182,17 @@ export class ProfileEditComponent implements OnInit {
       ]
     }
 
-    this.http.patch('http://localhost:8888/profile/1?_format=json', request, httpOptionsPatch)
+    this.http.patch(`http://localhost:8888/profile/${this.uid}?_format=json`, request, httpOptionsPatch)
     .subscribe(event => {
       console.log(event);
-      this.router.navigate(["profile"]);
+
+      this.refresh_token().then(response => {
+        if(response){
+          this.router.navigate(["profile"]);
+        } else {
+          console.log("error")
+        }
+      })
 
     });
   }
@@ -224,5 +230,31 @@ export class ProfileEditComponent implements OnInit {
       console.error( error );
     }
   }
+
+  private refresh_token(): Promise<boolean>{
+    let formData = new FormData();
+
+    const data = {
+      grant_type: "refresh_token",
+      refresh_token: localStorage.getItem("refresh_token"),
+      client_id: "33a7b468-55ea-4e65-99c5-09bc8ea061e9",
+      client_secret: "root",
+    };
+    for (let key in data) {
+      formData.append(key, data[key]);
+    }
+    let refresh = this.userService.new_access_token(formData).then(res => {
+
+        let access_token = res.data["access_token"]
+        let refresh_token = res.data["refresh_token"]
+
+        localStorage.setItem("access_token", "Bearer " + access_token);
+        localStorage.setItem("refresh_token", refresh_token);
+
+        return true
+  });
+  return refresh
+}
+
 
 }

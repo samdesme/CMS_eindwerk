@@ -19,9 +19,10 @@
 
 
 
-        <p class="content is-large has-text-centered" id="usrName">Welkom, {{profile.attributes.field_username}}</p>
+        <p class="content is-large has-text-centered" id="usrName">Welkom, {{profile.attributes.name}}</p>
         <a routerLink="/profile/edit/{{profile.id}}" class="btnEdit"><i class="icon fas fa-edit"></i></a>
-       
+        <a (click)="logout()" class="btnLogout">Log out</a>
+
     </div>
     
   
