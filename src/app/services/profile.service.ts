@@ -9,17 +9,28 @@ import axios from 'axios';
 })
 export class ProfileService {
   private fetchURL = 'http://localhost:8888/jsonapi/profile/user';
-  private fetchUserURL = 'http://localhost:8888/jsonapi/user/user';
+  private postURL = 'http://localhost:8888/entity/profile?_format=json';
+
 
 
 
   constructor() {}
   
-  public async getUser<T>(id: string): Promise<T> {
+  public async postProfile<T>(body: Object, token): Promise<T> {
     try {
-      const res = await axios.request<T>({
-        method: 'get',
-        url: `${this.fetchUserURL}/${id}`
+      console.log(token)
+      console.log(body)
+
+
+        const res = await axios.request<T>({
+        method: 'post',
+        url: this.postURL,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': token
+
+      },
+        data: body
       });
       return res.data;
     } catch (error) {
@@ -38,8 +49,6 @@ export class ProfileService {
       return Promise.reject(this.handleError(error));
     }
   }
-
-
 
   public async getProfile<T>(id: string): Promise<T> {
     try {

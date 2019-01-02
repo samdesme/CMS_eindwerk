@@ -1,6 +1,10 @@
 import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { Profile } from '../../models/profile';
+import { User } from '../../models/user';
+
 import { ProfileService } from './../../services/profile.service';
+import { UserService } from './../../services/user.service';
+
 import { JsonObject } from '../../models/json';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProfileImg, ImgAttributes } from '../../models/profile_picture';
@@ -18,6 +22,8 @@ import { HttpHeaders } from '@angular/common/http';
 })
 export class ProfileComponent implements OnInit {
   public profile: Profile[];
+  public user: User[];
+
   public profile_picture: ProfileImg[];
   id = localStorage.getItem("uuid");
   private sub: any;
@@ -26,6 +32,8 @@ export class ProfileComponent implements OnInit {
 
   constructor(
     private profileService: ProfileService,
+    private userService: UserService,
+
     private router: Router,
     private route: ActivatedRoute,
     private localstorageService: LocalstorageService,    
@@ -39,15 +47,16 @@ export class ProfileComponent implements OnInit {
     if (localStorage.access_token) {
         console.log(this.id)
       this.getUsername();
-      this.getProfileFilter();
-      this.getToken();
+      this.getProfile();
+      //this.getToken();
       
-      
+      console.log(localStorage.getItem("accesss_token"))
     }
     else {
       this.router.navigate(["login"]);
     }
   }
+
 
   public async getToken(): Promise<void> {
     try {
@@ -74,9 +83,9 @@ export class ProfileComponent implements OnInit {
 
   public async getUsername(): Promise<void> {
     try {
-      const res = await this.profileService.getUser<JsonObject>(this.id);
-      this.profile = res.data;
-      console.log(this.profile);
+      const res = await this.userService.getUser<JsonObject>(this.id);
+      this.user = res.data;
+      console.log(this.user);
     } catch ( error ) {
       console.error( error );
     }
@@ -86,27 +95,25 @@ export class ProfileComponent implements OnInit {
     this.localstorageService.removeItem("access_token");
     this.localstorageService.removeItem("uuid");
     this.localstorageService.removeItem("refresh_token");
-
-
     this.router.navigate(["login"]);
   }
 
-  public async getProfileFilter(): Promise<void> {
+  public async getProfile(): Promise<void> {
 
     let user_id
     let params = new HttpParams();
     params = params.append('filter[uid.id]', this.id);
 
-  
-
     try {
 
       await this.http.get<JsonObject>('http://localhost:8888/jsonapi/profile/user', {params: params})
       .subscribe(event => {
-        
+        this.profile = event.data[0];
         user_id = event.data[0]["id"]
+        
         this.getImg(user_id)
-        console.log(user_id)
+        console.log(this.profile)
+
   
       });
       

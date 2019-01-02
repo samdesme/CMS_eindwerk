@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { Profile, Attributes } from '../../../models/profile';
+import { User } from '../../../models/user';
+
 import { ProfileImg, ImgAttributes } from '../../../models/profile_picture';
 import { NewFile } from '../../../models/file';
 
@@ -11,6 +13,7 @@ import { JsonObject } from '../../../models/json';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpParams, HttpClient, HttpHeaders} from '@angular/common/http';
 import axios from 'axios';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-profile-edit',
@@ -21,6 +24,8 @@ import axios from 'axios';
 })
 export class ProfileEditComponent implements OnInit {
   public profile: Profile[];
+  public user: User[];
+
   public profile_picture: ProfileImg[];
   public newProfile_picture: ProfileImg;
 
@@ -30,10 +35,10 @@ export class ProfileEditComponent implements OnInit {
   fileName: string = '';
   msg: string = '';
   uid: string = '';
-
-
+  profile_id: number;
   id = this.route.snapshot.paramMap.get('id');
   selectedFile: File;
+  userDate;
   token;
   
   constructor(
@@ -41,19 +46,22 @@ export class ProfileEditComponent implements OnInit {
     private authService: AuthService,
     private userService: UserService,
 
-
     private router: Router,
     private route: ActivatedRoute,
     private http: HttpClient,
 
 
 
-  ) { }
+  ) { 
+
+  }
 
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id');
     this.getUser();
     this.getUsername();
+    this.getProfile();
+
   }
 
   onFileChanged(event) {
@@ -72,9 +80,9 @@ export class ProfileEditComponent implements OnInit {
 
   public async getUsername(): Promise<void> {
     try {
-      const res = await this.profileService.getUser<JsonObject>(this.id);
-      this.profile = res.data;
-      console.log(this.profile);
+      const res = await this.userService.getUser<JsonObject>(this.id);
+      this.user = res.data;
+      //console.log(this.profile);
     } catch ( error ) {
       console.error( error );
     }
@@ -82,18 +90,39 @@ export class ProfileEditComponent implements OnInit {
 
   public async getUser(): Promise<void> {
     try {
-      const res = await this.profileService.getUser<JsonObject>(this.id);
+      const res = await this.userService.getUser<JsonObject>(this.id);
       this.uid = res.data["attributes"]["drupal_internal__uid"]
   
-      console.log(this.uid);
+    } catch ( error ) {
+      console.error( error );
+    }
+  }
 
+  public async getProfile(): Promise<void> {
+
+    let params = new HttpParams();
+    params = params.append('filter[uid.id]', this.id);
+
+    try {
+
+      await this.http.get<JsonObject>('http://localhost:8888/jsonapi/profile/user', {params: params})
+      .subscribe(event => {
+
+        this.profile_id = event.data[0]["attributes"]["drupal_internal__profile_id"];
+        this.profile = event.data[0];
+        //this.userDate = new DatePipe('en-US').transform(event.data[0]["attributes"]["field_birthday"], 'dd/MM/yyyy')
+        
+      });
+      
+     
+      
     } catch ( error ) {
       console.error( error );
     }
   }
 
 
-  public postFile() {
+  public postFile(birthday, location, school, tagline) {
  let uuid;
     try {
 
@@ -112,11 +141,9 @@ export class ProfileEditComponent implements OnInit {
 
       this.refresh_token().then(response => {
         if(response){
-          this.patchProfileImg(uuid)
+          this.patchProfileInfo(uuid, birthday, location, school, tagline)
 
-        } else {
-          console.log("error")
-        }
+        } 
       })
     });
 
@@ -130,7 +157,6 @@ export class ProfileEditComponent implements OnInit {
 
   public patchUserInfo(strName){
 
-    console.log("name : ",strName);
 
     const httpOptionsPatch = {
       headers: new HttpHeaders({
@@ -141,29 +167,24 @@ export class ProfileEditComponent implements OnInit {
     
     let request : any = 
     {
-      "name": [
+      name: [
         {
-        "value": strName
+        value: strName
         }
       ]
     }
 
     this.http.patch(`http://localhost:8888/user/${this.uid}?_format=json`, request, httpOptionsPatch)
     .subscribe(event => {
+
       console.log(event);
-      this.refresh_token().then(response => {
-        if(response && this.selectedFile != null) {
-          this.postFile();
-        } else if (response) {
-          this.router.navigate(["profile"]);   
-        } else {
-         console.log("error")
-        }
-      });
+      
     });
   }
 
-  public patchProfileImg(rev_id){
+  public patchProfileInfo(rev_id, birthday, location, school, tagline){
+
+    let jsonObj: Object;
 
     const httpOptionsPatch = {
       headers: new HttpHeaders({
@@ -171,56 +192,87 @@ export class ProfileEditComponent implements OnInit {
       'Authorization': localStorage.getItem("access_token")
      })
   };
-    
-    let request : any = 
+
+  let body : any = 
+  {
+    type: "user",
+    field_birthday: [
+      {
+      value: birthday
+      }
+    ],
+    field_location: [
+      {
+      value: location
+      }
+    ],
+    field_school: [
+      {
+      value: school
+      }
+    ],
+    field_tagline: [
+      {
+      value: tagline
+      }
+    ]
+  }
+  
+    let bodyFile : any = 
     {
-      "type": "user",
-      "field_profile_picture": [
+      type: "user",
+      field_profile_picture: [
         {
-        "target_id": rev_id
+        target_id: rev_id
         }
       ]
     }
 
-    this.http.patch(`http://localhost:8888/profile/${this.uid}?_format=json`, request, httpOptionsPatch)
+    if(rev_id =! null){
+        jsonObj = Object.assign(body, bodyFile);
+    } else {
+        jsonObj = body
+    }
+
+    this.http.patch(`http://localhost:8888/profile/${this.profile_id}?_format=json`, jsonObj, httpOptionsPatch)
     .subscribe(event => {
       console.log(event);
 
       this.refresh_token().then(response => {
         if(response){
           this.router.navigate(["profile"]);
-        } else {
-          console.log("error")
         }
       })
 
     });
   }
 
-  public editProfile(name){
+  
+
+  public editProfile(name, birthday, location, school, tagline){
     let strName = name.value
+    let strDate = birthday.value
+    let strLoc = location.value
+    let strSchool = school.value
+    let strTag = tagline.value
     try {
 
-      /* this.uploadFile();
+     if (strName != "" && strDate != "" && strLoc != "" && strSchool != ""){
 
-      const patchObject = new JsonObject;
-      this.newProfile = new Profile;
-      this.newProfile.id = this.id;
-      this.newProfile.attributes = new Attributes;
-      this.newProfile.attributes.name = name.value;
-      this.newProfile.attributes.revision_id = this.revision_id;
-      
-      patchObject.data = this.newProfile;
-      console.log(patchObject);
-      const jsonResponse = this.profileService.editProfile<JsonObject>(this.id, patchObject);
-      console.log(jsonResponse); */
+      this.patchUserInfo(strName);
 
-      
+      if(this.selectedFile != null){
 
-     if (strName != ""){
-      this.patchUserInfo(strName)
+        this.postFile(strDate, strLoc, strSchool, strTag );
+
+      } else {
+        
+       this.patchProfileInfo(null, strDate, strLoc, strSchool, strTag);
+
+      }
 
      }
+   
      else
      {
       this.changeMsg("Vul de verplichte velden in!")

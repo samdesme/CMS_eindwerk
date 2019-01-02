@@ -3,10 +3,9 @@ $black: #000000;
 $white: #ffffff;
 $black_16: rgba(0, 0, 0, 0.16);
 $purple: #876bd1;
-$gray_op10: rgba(10,10,10,.1);
+$grey: #797979;
+$red: #A33434;
 
-$gray: rgb(155, 155, 155);
-$blue: #648ED0;
 //fonts
 $font_0: Avenir Next Reg;
 $font_1: Avenir Next Dem;
@@ -35,33 +34,11 @@ $url_1: url(../../../assets/fonts/AvenirNextLTPro-Demi.otf);
 	position: relative;
 }
 
-#usrName{
 
+form{
+	margin-bottom: 100px;
 }
-
-.avatar {
-	width: 150px;
-	height: 150px;
-
-	margin: -75px auto 20px auto;
-
-
-}
-
-#thumbnail {
-	height: 150px;
-
-	background-size: cover;
-    background-repeat: no-repeat;
-	background-position: 50% 50%;
-	
-	border-radius: 50%;
-	border: 5px #ffffff solid;
-	box-shadow: 0 2px 3px $gray_op10, 0 0 0 0px $gray_op10;
-
-}
-
-.btnPrimary {
+.btnCreate {
 	font-family: $font_1;
 	border: solid 3px $purple;
 	color: $purple;
@@ -77,40 +54,37 @@ $url_1: url(../../../assets/fonts/AvenirNextLTPro-Demi.otf);
 	margin: auto;
 }
 
-.btnEdit {
+#upload_button {
+	a {
+		font-family: $font_1;
+		font-size: 0.8em;
+		display: inline-block;
+		width: 120px;
+		height: 35px;
+		text-align: center;
+		background: $purple;
+		border-radius: 17.5px;
+		padding: 9px 10px 0px 10px;
+		color: $white;
+		box-shadow: 0px 3px 6px $black_16;
+	}
 
-	position: absolute;
-	top: 15px;
-	right: 15px;
+	input[type=file] {
+		display:none;
+	  }
 	
+	  p {
+		  color: $grey;
+		display: inline-block;
+		margin-left: 10px;
+	  }
+  }
+  
 
-}
+  .valMessage {
+	  font-family: $font_1;
+	  text-align: center;
+	  padding-top: 15px;
+	  color: $red;
+  }
 
-.btnLogout{
-	display: block;
-	width: 200px;
-	margin: 0 auto;
-	color: $purple;
-	text-decoration: underline;
-	text-align: center;
-}
-
-.info { 
-	margin-bottom: 20px;
-}
-.icList { 
-	margin-right: 10px;
-	color: $purple;
-	opacity: 0.5;
-	
-
-}
-.quote{
-	font-style: italic;
-}
-
-.icon {
-	color: $gray;
-	font-size: 20px;
-	
-}

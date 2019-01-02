@@ -1,5 +1,5 @@
 <div class="columns is-mobile is-centered">
-    <div *ngIf="profile" class="column is-three-quarters-mobile is-two-thirds-tablet is-half-desktop is-one-third-widescreen is-one-third-fullhd ">
+    <div *ngIf="user && profile" class="column is-three-quarters-mobile is-two-thirds-tablet is-half-desktop is-one-third-widescreen is-one-third-fullhd ">
  
 <div *ngIf="profile_picture;else placeholder" class="avatar">
 
@@ -8,19 +8,20 @@
     
 </div>
 
-<ng-template #placeholder>
-        <div class="avatar">
-
-                <figure id="thumbnail" style="background-image: url('http://www.redsaludtocache.gob.pe/wp-content/themes/corporatebusiness/images/thumbnail.png')">
-                </figure>
-                
-            </div>
-</ng-template>
 
 
 
-        <p class="content is-large has-text-centered" id="usrName">Welkom, {{profile.attributes.name}}</p>
-        <a routerLink="/profile/edit/{{profile.id}}" class="btnEdit"><i class="icon fas fa-edit"></i></a>
+        <p class="content is-large has-text-centered" id="usrName">Welkom, {{user.attributes.name}}</p>
+        <a routerLink="/profile/edit/{{user.id}}" class="btnEdit"><i class="icon fas fa-edit"></i></a>
+
+        <div class="info">
+            <p><span class="infoL"><i class="icList fas fa-school"></i></span><span class="infoR"> {{profile.attributes.field_school}}</span></p>
+            <p><span class="infoL"><i class="icList fas fa-home"></i> </span><span class="infoR"> {{profile.attributes.field_location}}</span></p>
+            <p><span class="infoL"><i class="icList fas fa-quote-left"></i> </span>
+                <span class="infoR quote" *ngIf="profile.attributes.field_tagline;else optional"> {{profile.attributes.field_tagline}}</span>
+            </p>
+        </div>
+
         <a (click)="logout()" class="btnLogout">Log out</a>
 
     </div>
@@ -30,7 +31,7 @@
 
   <div class="columns is-mobile is-centered">
     <div class="column is-three-quarters-mobile is-two-thirds-tablet is-half-desktop is-one-third-widescreen is-one-third-fullhd ">
-        <a routerLink="" class="button is-outlined is-rounded is-medium btnPrimary">DOE QUIZ</a>
+        <a  routerLink="" class="button is-outlined is-rounded is-medium btnPrimary">DOE QUIZ</a>
 
     </div>
     
@@ -44,5 +45,18 @@
     
   
   </div>
+
+  <ng-template #placeholder>
+    <div class="avatar">
+
+            <figure id="thumbnail" style="background-image: url('http://www.redsaludtocache.gob.pe/wp-content/themes/corporatebusiness/images/thumbnail.png')">
+            </figure>
+            
+        </div>
+</ng-template>
+
+<ng-template #optional>
+<span class="infoR quote">...</span>
+</ng-template>
 
   <app-nav [myTemplate]="myTemplate"></app-nav>

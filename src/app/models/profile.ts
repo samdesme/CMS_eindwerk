@@ -6,5 +6,10 @@ export class Profile {
 
   export class Attributes {
     name: string;
+    field_school: string;
+    field_location: string;
+    field_birthday: string;
+    field_tagline: string;
+
     revision_id;
   }
