@@ -58,8 +58,8 @@ export class ProfileEditComponent implements OnInit {
 
   ngOnInit() {
     this.id = this.route.snapshot.paramMap.get('id');
+    this.getId();
     this.getUser();
-    this.getUsername();
     this.getProfile();
 
   }
@@ -78,7 +78,7 @@ export class ProfileEditComponent implements OnInit {
    }
   
 
-  public async getUsername(): Promise<void> {
+  public async getUser(): Promise<void> {
     try {
       const res = await this.userService.getUser<JsonObject>(this.id);
       this.user = res.data;
@@ -88,7 +88,7 @@ export class ProfileEditComponent implements OnInit {
     }
   }
 
-  public async getUser(): Promise<void> {
+  public async getId(): Promise<void> {
     try {
       const res = await this.userService.getUser<JsonObject>(this.id);
       this.uid = res.data["attributes"]["drupal_internal__uid"]

@@ -26,17 +26,47 @@ $url_1: url(../../../assets/fonts/AvenirNextLTPro-Demi.otf);
 	src: $url_1 format("truetype");
 }
 .column {
-	min-height: 200px;
+	min-height: 150px;
 	color: $black;
 	background: $white;
-	margin-top: 40px;
+	margin-bottom: 40px;
 	//Instead of the line below you could use @include box-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
 	box-shadow: 3px 3px 6px $black_16;
 	position: relative;
 }
 
-#usrName{
+.columns {
+	&:last-of-type {
+		margin-bottom: 50px;
+      }
+}
 
+#lblGoal{
+	width: 200px;
+	height: 50px;
+	padding: 12px 0px;
+	display: block;
+	position: absolute;
+	bottom: 0;
+	top: 0;
+	left: 0;
+	right: 0;
+	font-size: 1em;
+	margin: auto;
+
+	.icGoal {
+	display: block;
+	position: absolute;
+	font-size: 2em;
+	padding-right: 10px;
+	color: $purple;
+	opacity: 0.5;
+
+	}
+}
+
+.small{
+	color: $gray
 }
 
 .avatar {

@@ -16,7 +16,7 @@ export class ProfileService {
 
   constructor() {}
   
-  public async postProfile<T>(body: Object, token): Promise<T> {
+  public async postProfile<T>(body: Object, token:string): Promise<T> {
     try {
       console.log(token)
       console.log(body)

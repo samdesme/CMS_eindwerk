@@ -1,9 +1,11 @@
 import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { Profile } from '../../models/profile';
 import { User } from '../../models/user';
+import { Goal } from '../../models/goal';
 
 import { ProfileService } from './../../services/profile.service';
 import { UserService } from './../../services/user.service';
+import { GoalService } from "../../services/goal.service";
 
 import { JsonObject } from '../../models/json';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -23,6 +25,8 @@ import { HttpHeaders } from '@angular/common/http';
 export class ProfileComponent implements OnInit {
   public profile: Profile[];
   public user: User[];
+  public goal: Goal[];
+
 
   public profile_picture: ProfileImg[];
   id = localStorage.getItem("uuid");
@@ -33,6 +37,8 @@ export class ProfileComponent implements OnInit {
   constructor(
     private profileService: ProfileService,
     private userService: UserService,
+    private goalService: GoalService,
+
 
     private router: Router,
     private route: ActivatedRoute,
@@ -46,9 +52,9 @@ export class ProfileComponent implements OnInit {
 
     if (localStorage.access_token) {
         console.log(this.id)
-      this.getUsername();
+      this.getUser();
       this.getProfile();
-      //this.getToken();
+      this.getGoal();
       
       console.log(localStorage.getItem("accesss_token"))
     }
@@ -81,11 +87,21 @@ export class ProfileComponent implements OnInit {
     
   }
 
-  public async getUsername(): Promise<void> {
+  public async getUser(): Promise<void> {
     try {
       const res = await this.userService.getUser<JsonObject>(this.id);
       this.user = res.data;
       console.log(this.user);
+    } catch ( error ) {
+      console.error( error );
+    }
+  }
+
+  public async getGoal(): Promise<void> {
+    try {
+      const res = await this.goalService.getGoals<JsonObject>(this.id);
+      this.goal = res.data[0];
+      console.log(this.goal);
     } catch ( error ) {
       console.error( error );
     }
