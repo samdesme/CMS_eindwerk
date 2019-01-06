@@ -122,7 +122,7 @@ export class ProfileEditComponent implements OnInit {
   }
 
 
-  public postFile(birthday, location, school, tagline) {
+public postFile(birthday, location, school, tagline) {
  let uuid;
     try {
 
@@ -228,7 +228,7 @@ export class ProfileEditComponent implements OnInit {
       ]
     }
 
-    if(rev_id =! null){
+    if(rev_id != null){
         jsonObj = Object.assign(body, bodyFile);
     } else {
         jsonObj = body

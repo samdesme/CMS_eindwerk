@@ -139,7 +139,7 @@ export class GoalEditComponent implements OnInit {
       }
 
       else {
-        this.changeMsg("De gemiddelde uren slaap mogen niet lager zijn dan 5 uren.")
+        this.changeMsg("De gemiddelde uren slaap mogen niet lager zijn dan 5 uur.")
       }
 
     } catch (error) {

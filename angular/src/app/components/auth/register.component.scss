@@ -80,7 +80,12 @@ form{
 	  }
   }
   
-
+.authSwitch{
+	a {
+		color: $black;
+		text-decoration: underline
+	}
+}
   .valMessage {
 	  font-family: $font_1;
 	  text-align: center;

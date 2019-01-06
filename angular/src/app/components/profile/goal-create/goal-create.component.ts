@@ -56,7 +56,7 @@ export class GoalCreateComponent implements OnInit {
     this.id = this.route.snapshot.paramMap.get('id');
     this.getUser();
     this.getProfile();
-    this.checkGoal();
+   // this.checkGoal();
    
   }
 
@@ -87,6 +87,8 @@ export class GoalCreateComponent implements OnInit {
 
           this.profile_id = event.data[0]["attributes"]["drupal_internal__profile_id"];
           this.profile_uid = event.data[0]["id"]
+
+          console.log(this.profile_uid, this.profile_id)
         });
 
 
@@ -110,11 +112,10 @@ export class GoalCreateComponent implements OnInit {
     let dt = date.value
     let nAverage = average.value
 
+    console.log(localStorage.getItem("access_token"))
+    
     try {
-
-console.log(localStorage.getItem("access_token"))
       if (dt != null && nAverage != null) {
-
         const httpOptionsPatch = {
           headers: new HttpHeaders({
             'Content-Type': 'application/json',
@@ -124,16 +125,8 @@ console.log(localStorage.getItem("access_token"))
         let body: any =
         {
           type: "goals",
-          status: [
-            {
-                value: true
-            }
-        ],
-          title: [
-            {
-              value: "Goal " + String(dt)
-            }
-          ],
+          status: [{value: 1}],
+          title: [{value: "Goal " + String(dt)}],
           field_profile_id: [
             {
               target_id: this.profile_id,
@@ -142,21 +135,9 @@ console.log(localStorage.getItem("access_token"))
               url: "/profile/" + this.profile_id
             }
           ],
-          field_goal: [
-            {
-              value: dt
-            }
-          ],
-          field_achieved: [
-            {
-              value: false
-            }
-          ],
-          field_average: [
-            {
-              value: Math.round( nAverage * 10 ) / 10
-            }
-          ],
+          field_goal: [{ value: dt }],
+          field_achieved: [{value: 0}],
+          field_average: [{value: Math.round( nAverage * 10 ) / 10}],
 
         }
 

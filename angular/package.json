@@ -21,6 +21,8 @@
     "@angular/platform-browser-dynamic": "^6.1.0",
     "@angular/router": "^6.1.0",
     "@types/axios": "^0.14.0",
+    "angular-steps": "^1.0.0",
+    "angular2-wizard": "^0.4.0",
     "bulma": "^0.7.2",
     "core-js": "^2.5.4",
     "ng-include": "^1.0.0",

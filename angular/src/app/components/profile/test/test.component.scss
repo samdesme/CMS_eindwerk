@@ -8,7 +8,7 @@ $red: #A33434;
 
 //fonts
 $font_0: Avenir Next Reg;
-$font_1: Avenir Next Dem;
+$font_1: Avenir Next Med;
 
 
 //urls
@@ -40,49 +40,67 @@ $url_1: url(../../../../assets/fonts/AvenirNextLTPro-Demi.otf);
 .form{
 	margin-bottom: 100px;
 }
-.btnCreate {
+
+.btn{
 	font-family: $font_1;
-	border: solid 3px $purple;
 	color: $purple;
 	width: 200px;
 	height: 50px;
-	padding: 12px 0px;
 	display: block;
 	position: absolute;
 	bottom: 15px;
-	left: 0;
-	right: 0;
 	font-size: 1em;
 	margin: auto;
+
+}
+
+#btnNext{
+	padding: 12px 0px;
+	border: solid 3px $purple;
+	right: 0;
+	left: 0;
+
+	
+}
+
+#btnPrev{
+	padding: 8px 0px;
+
+	left: 15px;
+
 }
 
 .control{
-	p {
-		font-size: 1.6em;
-		line-height: 2em;
-	}
-	span {
+	.radio {
 		display: inline-block;
-		padding: 10px 20px;
-		line-height: 1.3em
+		width: 100%;
+		margin: 15px 0px;
+
+		span{
+			display: block;
+			margin-left: 30px;
+			margin-top: -20px;
+
+		}
+	}
 	
+	.tips p {
+		display: block;
+		margin-top: 10px;
+	}
+
+	.resIcon {
+		display: block;
+		width: 200px;
+		margin: 50px auto;
+
 	}
 }
   
-.resIcon {
-	display: block;
-	width: 200px;
-	margin: 50px auto;
 
-}
 
-	input[type=text] {
-		width: 100px;
-	}
 
-	input[type=number] {
-		width: 50px;
-	}
+	
 
   .valMessage {
 	  font-family: $font_1;

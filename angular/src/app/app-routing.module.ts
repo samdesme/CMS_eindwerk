@@ -8,6 +8,7 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { ProfileEditComponent } from './components/profile/profile-edit/profile-edit.component';
 import { GoalCreateComponent } from './components/profile/goal-create/goal-create.component';
 import { GoalEditComponent } from './components/profile/goal-edit/goal-edit.component';
+import { TestComponent } from './components/profile/test/test.component';
 
 
 const routes: Routes = [
@@ -17,6 +18,7 @@ const routes: Routes = [
   { path: 'profile/edit/:id', component: ProfileEditComponent },
   { path: 'profile/goal/add/:id', component: GoalCreateComponent },
   { path: 'profile/goal/edit/:id', component: GoalEditComponent },
+  { path: 'profile/test/:id', component: TestComponent },
 
 
   { path: 'login', component: LoginComponent },

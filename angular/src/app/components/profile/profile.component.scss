@@ -40,7 +40,7 @@ $url_1: url(../../../assets/fonts/AvenirNextLTPro-Demi.otf);
 		margin-bottom: 50px;
       }
 }
-
+ 
 #lblGoal{
 	width: 200px;
 	height: 50px;
@@ -116,6 +116,12 @@ $url_1: url(../../../assets/fonts/AvenirNextLTPro-Demi.otf);
 
 }
 
+.resIcon {
+	display: block;
+	width: 100px;
+	margin: 15px auto;
+
+}
 .btnLogout{
 	display: block;
 	width: 200px;

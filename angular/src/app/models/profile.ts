@@ -10,6 +10,5 @@ export class Profile {
     field_location: string;
     field_birthday: string;
     field_tagline: string;
-
-    revision_id;
+    revision_id: number;
   }
