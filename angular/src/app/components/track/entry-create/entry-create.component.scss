@@ -1,3 +1,5 @@
+@import '~css-star-rating/scss/star-rating';
+
 //colors
 $black: #000000;
 $white: #ffffff;
@@ -9,11 +11,13 @@ $red: #A33434;
 //fonts
 $font_0: Avenir Next Reg;
 $font_1: Avenir Next Dem;
+$font_2: Avenir Next Med;
 
 
 //urls
 $url_0: url(../../../../assets/fonts/AvenirNextLTPro-Regular.otf);
 $url_1: url(../../../../assets/fonts/AvenirNextLTPro-Demi.otf);
+$url_2: url(../../../../assets/fonts/Avenir-Medium.ttf);
 
 
 @font-face {
@@ -24,6 +28,11 @@ $url_1: url(../../../../assets/fonts/AvenirNextLTPro-Demi.otf);
 	font-family: $font_1;
 	src: $url_1 format("truetype");
 }
+@font-face {
+	font-family: $font_2;
+	src: $url_2 format("truetype");
+}
+
 .column {
 	min-height: 200px;
 	color: $black;
@@ -34,10 +43,8 @@ $url_1: url(../../../../assets/fonts/AvenirNextLTPro-Demi.otf);
 	
 }
 
-
-
 .form{
-	margin-bottom: 100px;
+	margin-bottom: 50px;
 }
 .btnCreate {
 	font-family: $font_1;
@@ -56,15 +63,35 @@ $url_1: url(../../../../assets/fonts/AvenirNextLTPro-Demi.otf);
 }
 
 .control{
-	p {
-		font-size: 1.6em;
-		line-height: 2em;
-	}
+	margin-top: 20px;
+	margin-bottom: 0;
+
 	span {
 		display: inline-block;
-		padding: 10px 20px;
-		line-height: 1.3em
+		width: 100%;
+		margin-bottom: 30px;
+		font-size: 1.2em;
+		
 	
+		.rating {
+			float: right;
+		}
+
+		input[type=time] {
+			float: right;
+			width: 100px;
+			padding-left: 20px
+		}
+
+		textarea {
+			padding: 10px;
+			display: block;
+			border: 1px solid $black_16;
+            border-radius: 10px;
+			margin-top: 20px;
+			height: 100px;
+			width: 100%;
+		}
 	}
 }
   
@@ -75,18 +102,37 @@ $url_1: url(../../../../assets/fonts/AvenirNextLTPro-Demi.otf);
 
 }
 
-	input[type=text] {
-		width: 100px;
-	}
-
-	input[type=number] {
-		width: 50px;
-	}
-
-  .valMessage {
+.valMessage {
 	  font-family: $font_1;
 	  text-align: center;
 	  padding-top: 15px;
 	  color: $red;
   }
 
+  .rating.color-negative .star-container .star {
+	svg {
+	  fill: #0f0;
+	}
+	i {
+	  color: #0f0;
+	}
+  }
+  
+  .rating.color-ok .star-container .star {
+	svg {
+	  fill: $red;
+	}
+	i {
+	  color: $red;
+	}
+  }
+  
+  
+  .rating.color-default .star-container .star {
+	svg {
+	  fill: #ff0;
+	}
+	i {
+	  color: #ff0;
+	}
+  }

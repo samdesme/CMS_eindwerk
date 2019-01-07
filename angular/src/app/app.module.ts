@@ -8,10 +8,14 @@ import { GoalCreateComponent } from './components/profile/goal-create/goal-creat
 import { GoalEditComponent } from './components/profile/goal-edit/goal-edit.component';
 import { TestComponent } from './components/profile/test/test.component';
 
+import { EntryComponent } from './components/track/entries.component';
+import { EntryCreateComponent } from './components/track/entry-create/entry-create.component';
+
+import { StarRatingModule } from 'angular-star-rating';
+
 import { NavComponent } from './components/nav/nav.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import { FormWizardModule } from 'angular2-wizard';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -27,14 +31,16 @@ import { AppRoutingModule } from './app-routing.module';
     ProfileEditComponent,
     GoalCreateComponent,
     GoalEditComponent,
-    TestComponent
+    TestComponent,
+    EntryComponent,
+    EntryCreateComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    FormWizardModule
+    StarRatingModule.forRoot()
       ],
   providers: [],
   bootstrap: [AppComponent]

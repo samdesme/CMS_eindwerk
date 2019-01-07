@@ -1,0 +1,180 @@
+//colors
+$black: #000000;
+$white: #ffffff;
+$black_16: rgba(0, 0, 0, 0.16);
+$purple: #876bd1;
+$gray_op10: rgba(10,10,10,.1);
+
+$gray: rgb(155, 155, 155);
+$blue: #648ED0;
+//fonts
+$font_0: Avenir Next Reg;
+$font_1: Avenir Next Dem;
+$font_2: Avenir Next Med;
+
+
+//urls
+$url_0: url(../../../assets/fonts/AvenirNextLTPro-Regular.otf);
+$url_1: url(../../../assets/fonts/AvenirNextLTPro-Demi.otf);
+$url_2: url(../../../assets/fonts/Avenir-Medium.ttf);
+
+
+
+@font-face {
+	font-family: $font_0;
+	src: $url_0 format("truetype");
+}
+@font-face {
+	font-family: $font_1;
+	src: $url_1 format("truetype");
+}
+
+@font-face {
+	font-family: $font_2;
+	src: $url_2 format("truetype");
+}
+
+
+.column {
+	min-height: 150px;
+	background: $white;
+	margin-bottom: 40px;
+	box-shadow: 3px 3px 6px $black_16;
+	position: relative;
+}
+
+.columns {
+	&:last-of-type {
+		margin-bottom: 50px;
+      }
+}
+
+#btnArea {
+	background: none;
+	position: absolute;
+	bottom: 0;
+	box-shadow: none;
+
+	
+}
+
+ 
+#lblGoal{
+	width: 200px;
+	height: 50px;
+	padding: 12px 0px;
+	display: block;
+	position: absolute;
+	bottom: 0;
+	top: 0;
+	left: 0;
+	right: 0;
+	font-size: 1em;
+	margin: auto;
+
+	.icGoal {
+	display: block;
+	position: absolute;
+	font-size: 2em;
+	padding-right: 10px;
+	color: $purple;
+	opacity: 0.5;
+
+	}
+}
+
+.small{
+	color: $gray
+}
+
+.avatar {
+	width: 150px;
+	height: 150px;
+
+	margin: -75px auto 20px auto;
+
+
+}
+
+
+.header {
+	margin-top: 25px;
+
+
+	p{
+		line-height: 0;
+		padding-bottom: 10px;
+	}
+}
+
+
+.btnPrimary {
+	display: block;
+	position: absolute;
+	border: solid 3px $purple;
+	font-family: $font_1;
+	background: $white;
+	color: $purple;
+	width: 75px;
+	height: 75px;
+	padding: 18px 0px;
+	bottom: 40px;
+	right: 0;
+	font-size: 1em;
+	margin: auto;
+}
+
+.btnEdit {
+
+	position: absolute;
+	top: 15px;
+	right: 15px;
+	
+
+}
+
+.info { 
+	margin-bottom: 20px;
+
+	div {
+		display: inline-block;
+		width: 50%;
+
+		p {
+			font-family: $font_2
+		}
+
+		label {
+			display: inline-block;
+			width: 100%
+		}
+	}
+	p {
+		margin-bottom: 15px;
+	}
+}
+
+.rating { 
+	display: inline-block;
+	margin-bottom: 15px;
+
+
+	i {
+		display: inline-block;
+		width: 50px;
+		
+		
+	}
+	
+}
+
+span {
+		color: $purple
+
+}
+
+.icon {
+	color: $gray;
+	font-size: 20px;
+	
+}

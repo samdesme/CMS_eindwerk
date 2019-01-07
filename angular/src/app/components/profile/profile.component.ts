@@ -32,7 +32,7 @@ export class ProfileComponent implements OnInit {
   id = localStorage.getItem("uuid");
   private sub: any;
 
-  @ViewChild('myTemplate', {read: TemplateRef}) myTemplate: TemplateRef<any>;
+  @ViewChild('navTemplate', {read: TemplateRef}) navTemplate: TemplateRef<any>;
 
   constructor(
     private profileService: ProfileService,
