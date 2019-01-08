@@ -31,6 +31,19 @@ export class EntryService {
     }
   }
 
+  public async getEntry<T>(id: string): Promise<T> {
+    try {
+      const res = await axios.request<T>({
+        method: 'get',
+        url: `${this.getEntriesURL}/${id}`
+      });
+      return res.data;
+
+    } catch (error) {
+      return Promise.reject(this.handleError(error));
+    }
+  }
+
   public async postEntry<T>(body: Object, token:string): Promise<T> {
     try {
         const axiosResponse = await axios.request<T>({

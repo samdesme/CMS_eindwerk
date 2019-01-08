@@ -11,6 +11,8 @@ import { GoalEditComponent } from './components/profile/goal-edit/goal-edit.comp
 import { TestComponent } from './components/profile/test/test.component';
 import { EntryComponent } from './components/track/entries.component';
 import { EntryCreateComponent } from './components/track/entry-create/entry-create.component';
+import { EntryEditComponent } from './components/track/entry-edit/entry-edit.component';
+import { StatsComponent } from './components/track/stats/stats.component';
 
 
 const routes: Routes = [
@@ -24,6 +26,8 @@ const routes: Routes = [
 
   { path: 'track', component: EntryComponent },
   { path: 'track/add', component: EntryCreateComponent },
+  { path: 'track/edit/:id', component: EntryEditComponent },
+  //{ path: 'track/stats', component: StatsComponent },
 
 
 

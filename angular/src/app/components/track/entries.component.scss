@@ -35,65 +35,80 @@ $url_2: url(../../../assets/fonts/Avenir-Medium.ttf);
 }
 
 
-.column {
-	min-height: 150px;
+.entrySingle {
+	min-height: 250px;
 	background: $white;
+	padding: 15px;
 	margin-bottom: 40px;
 	box-shadow: 3px 3px 6px $black_16;
 	position: relative;
 }
 
-.columns {
-	&:last-of-type {
-		margin-bottom: 50px;
+.entryWrap {
+	
+	&:first-of-type {
+		margin-top: 40px;
       }
 }
 
 #btnArea {
 	background: none;
-	position: absolute;
-	bottom: 0;
+	position: fixed;
+	bottom: 55px;
 	box-shadow: none;
+	z-index: 10000;
+
+}
+
+
+/* Styles for tab labels */
+.mat-tab-label {
+	font-family: $font_2;
+	font-size: 1em;
+	display: inline-block;
+    padding: 5px;
+	color: $white;
+	width: 50%!important;
+	opacity: 1!important;
+}
+
+.mat-ripple-element {
+	transform: none!important;
+	left: 0;
+	width: 100%!important;
+
+}
+
+.mat-tab-label-content {
+	display: block;
+	position: absolute;
+	width: 100%!important;
+
+}
+
+.mat-tab-group{
+    background-color: transparent;
+	margin-bottom: 70px;
+
+}
+
+/* Styles for the active tab label */
+.mat-tab-label.mat-tab-label-active {
+	background-color: $white;
+    color: $black;
+}
+
+/* Styles for the ink bar */
+.mat-ink-bar {
+	background-color: $black;
+	width: 50%!important;
 
 	
 }
 
- 
-#lblGoal{
-	width: 200px;
-	height: 50px;
-	padding: 12px 0px;
-	display: block;
-	position: absolute;
-	bottom: 0;
-	top: 0;
-	left: 0;
-	right: 0;
-	font-size: 1em;
-	margin: auto;
-
-	.icGoal {
-	display: block;
-	position: absolute;
-	font-size: 2em;
-	padding-right: 10px;
-	color: $purple;
-	opacity: 0.5;
-
-	}
-}
 
 .small{
 	color: $gray
-}
-
-.avatar {
-	width: 150px;
-	height: 150px;
-
-	margin: -75px auto 20px auto;
-
-
 }
 
 
@@ -101,35 +116,50 @@ $url_2: url(../../../assets/fonts/Avenir-Medium.ttf);
 	margin-top: 25px;
 
 
-	p{
+	p {
 		line-height: 0;
-		padding-bottom: 10px;
+		padding: 0px 0px 10px 0px
 	}
 }
 
 
-.btnPrimary {
+.btnNew {
 	display: block;
 	position: absolute;
-	border: solid 3px $purple;
+	border: 2px solid $white;
+	border-radius: 15px;
+	box-shadow: 2px 2px 10px $black_16;
 	font-family: $font_1;
-	background: $white;
-	color: $purple;
-	width: 75px;
-	height: 75px;
-	padding: 18px 0px;
+	background: $purple;
+	color: $white;
+	width: 60px;
+	height: 60px;
+	padding: 13px 0px;
 	bottom: 40px;
 	right: 0;
 	font-size: 1em;
 	margin: auto;
+	text-align: center;
+
+	&:hover{
+		color: $white;
+
+	}
 }
 
 .btnEdit {
 
 	position: absolute;
 	top: 15px;
-	right: 15px;
-	
+	right: 50px;	
+
+}
+
+.btnDelete {
+
+	position: absolute;
+	top: 15px;
+	right: 15px;	
 
 }
 
@@ -152,6 +182,11 @@ $url_2: url(../../../assets/fonts/Avenir-Medium.ttf);
 	p {
 		margin-bottom: 15px;
 	}
+
+	span {
+		color: $purple
+
+}
 }
 
 .rating { 
@@ -168,10 +203,7 @@ $url_2: url(../../../assets/fonts/Avenir-Medium.ttf);
 	
 }
 
-span {
-		color: $purple
 
-}
 
 .icon {
 	color: $gray;

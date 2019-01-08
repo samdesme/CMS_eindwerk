@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnInit, ViewChild, TemplateRef, ViewEncapsulation } from '@angular/core';
 import { Profile } from '../../models/profile';
 import { User } from '../../models/user';
 import { Entry } from '../../models/entry';
@@ -13,12 +13,14 @@ import { ProfileImg, ImgAttributes } from '../../models/profile_picture';
 import { LocalstorageService } from "../../services/localstorage.service";
 import { HttpParams, HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
+import { DatePipe } from '@angular/common'
 
 
 @Component({
   selector: 'app-entries',
   templateUrl: './entries.component.html',
   styleUrls: ['./entries.component.scss'],
+  encapsulation: ViewEncapsulation.None
 
   
 })
@@ -32,10 +34,14 @@ export class EntryComponent implements OnInit {
   id = localStorage.getItem("uuid");
 
   profile_id: string;
+  datepipe: DatePipe = new DatePipe('en-US');
 
-  private sub: any;
+  bool: Boolean;
+
+  
 
   @ViewChild('navTemplate', {read: TemplateRef}) navTemplate: TemplateRef<any>;
+  @ViewChild('statsTemplate', {read: TemplateRef}) statsTemplate: TemplateRef<any>;
 
   constructor(
     private profileService: ProfileService,
@@ -54,6 +60,8 @@ export class EntryComponent implements OnInit {
     if (localStorage.access_token) {
         console.log(this.id)
 
+      this.bool = true;
+  
       this.getUser();
       this.getProfile();
 
@@ -64,7 +72,9 @@ export class EntryComponent implements OnInit {
   }
 
 
- 
+  refreshPage(): void {
+    window.location.reload();
+}
 
   public async getUser(): Promise<void> {
     try {
@@ -80,12 +90,50 @@ export class EntryComponent implements OnInit {
     try {
       const res = await this.entryService.getEntries<JsonObject>(this.profile_id);
       this.entries = res.data;
+
+      for (let i = 0; i < res.data.length; i++) {
+      //let dateFormat = this.datepipe.transform(res.data[i]['attributes']['field_created'], 'dd/mm/yyyy');
+      let dateEntry = new Date(res.data[i]['attributes']['field_created']);
+      let dateToday = new Date();
+
+      if(dateEntry.getDay() == dateToday.getDay()){
+        this.bool = false;
+      }
+
+
+      console.log(dateEntry, dateToday);
+
+      }
+
       console.log(this.profile_id);
     } catch ( error ) {
       console.error( error );
     }
   }
 
+public async deleteEntry(id: number) {
+
+  try {
+
+      const httpOptionsPatch = {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          'Authorization': localStorage.getItem("access_token")
+        })
+      };
+
+      this.http.delete(`http://localhost:8888/node/${id}?_format=json`, httpOptionsPatch)
+        .subscribe(event => {
+          console.log(event);
+          this.refresh_token();
+          this.refreshPage();     
+           })
+
+  } catch (error) {
+    console.error(error);
+  }
+
+}
 
 
   public async getProfile(): Promise<void> {
@@ -108,6 +156,31 @@ export class EntryComponent implements OnInit {
     } catch ( error ) {
       console.error( error );
     }
+  }
+
+  private refresh_token(): Promise<boolean> {
+    let formData = new FormData();
+
+    const data = {
+      grant_type: "refresh_token",
+      refresh_token: localStorage.getItem("refresh_token"),
+      client_id: "33a7b468-55ea-4e65-99c5-09bc8ea061e9",
+      client_secret: "root",
+    };
+    for (let key in data) {
+      formData.append(key, data[key]);
+    }
+    let refresh = this.userService.new_access_token(formData).then(res => {
+
+      let access_token = res.data["access_token"]
+      let refresh_token = res.data["refresh_token"]
+
+      localStorage.setItem("access_token", "Bearer " + access_token);
+      localStorage.setItem("refresh_token", refresh_token);
+
+      return true
+    });
+    return refresh
   }
 
   

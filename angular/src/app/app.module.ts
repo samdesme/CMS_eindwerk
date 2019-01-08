@@ -10,8 +10,12 @@ import { TestComponent } from './components/profile/test/test.component';
 
 import { EntryComponent } from './components/track/entries.component';
 import { EntryCreateComponent } from './components/track/entry-create/entry-create.component';
+import { EntryEditComponent } from './components/track/entry-edit/entry-edit.component';
+import { StatsComponent } from './components/track/stats/stats.component';
 
 import { StarRatingModule } from 'angular-star-rating';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {MatTabsModule} from '@angular/material/tabs';
 
 import { NavComponent } from './components/nav/nav.component';
 import { HttpClientModule } from '@angular/common/http';
@@ -19,7 +23,8 @@ import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-
+import { ChartsModule } from 'ng2-charts';
+import { OrderModule } from 'ngx-order-pipe';
 
 @NgModule({
   declarations: [
@@ -33,14 +38,20 @@ import { AppRoutingModule } from './app-routing.module';
     GoalEditComponent,
     TestComponent,
     EntryComponent,
-    EntryCreateComponent
+    EntryCreateComponent,
+    EntryEditComponent,
+    StatsComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    StarRatingModule.forRoot()
+    StarRatingModule.forRoot(),
+    BrowserAnimationsModule,
+    MatTabsModule,
+    ChartsModule,
+    OrderModule
       ],
   providers: [],
   bootstrap: [AppComponent]
