@@ -2,11 +2,8 @@ import { Component, OnInit, ViewChild, TemplateRef, ViewEncapsulation } from '@a
 import { Profile } from '../../models/profile';
 import { User } from '../../models/user';
 import { Entry } from '../../models/entry';
-
-import { ProfileService } from '../../services/profile.service';
 import { UserService } from '../../services/user.service';
 import { EntryService } from "../../services/entry.service";
-
 import { JsonObject } from '../../models/json';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProfileImg, ImgAttributes } from '../../models/profile_picture';
@@ -22,34 +19,28 @@ import { DatePipe } from '@angular/common'
   styleUrls: ['./entries.component.scss'],
   encapsulation: ViewEncapsulation.None
 
-  
+
 })
 export class EntryComponent implements OnInit {
   public profile: Profile;
   public user: User[];
   public entries: Entry[];
-
-
   public profile_picture: ProfileImg[];
-  id = localStorage.getItem("uuid");
 
+
+  id = localStorage.getItem("uuid");
   profile_id: string;
   datepipe: DatePipe = new DatePipe('en-US');
-
   bool: Boolean;
 
-  
 
-  @ViewChild('navTemplate', {read: TemplateRef}) navTemplate: TemplateRef<any>;
-  @ViewChild('statsTemplate', {read: TemplateRef}) statsTemplate: TemplateRef<any>;
+  @ViewChild('navTemplate', { read: TemplateRef }) navTemplate: TemplateRef<any>;
+  @ViewChild('statsTemplate', { read: TemplateRef }) statsTemplate: TemplateRef<any>;
 
   constructor(
-    private profileService: ProfileService,
     private userService: UserService,
     private entryService: EntryService,
-
-
-    private router: Router, 
+    private router: Router,
     private http: HttpClient
 
 
@@ -58,10 +49,10 @@ export class EntryComponent implements OnInit {
   ngOnInit() {
 
     if (localStorage.access_token) {
-        console.log(this.id)
+      console.log(this.id)
 
       this.bool = true;
-  
+
       this.getUser();
       this.getProfile();
 
@@ -74,15 +65,15 @@ export class EntryComponent implements OnInit {
 
   refreshPage(): void {
     window.location.reload();
-}
+  }
 
   public async getUser(): Promise<void> {
     try {
       const res = await this.userService.getUser<JsonObject>(this.id);
       this.user = res.data;
       console.log(this.user);
-    } catch ( error ) {
-      console.error( error );
+    } catch (error) {
+      console.error(error);
     }
   }
 
@@ -92,28 +83,24 @@ export class EntryComponent implements OnInit {
       this.entries = res.data;
 
       for (let i = 0; i < res.data.length; i++) {
-      //let dateFormat = this.datepipe.transform(res.data[i]['attributes']['field_created'], 'dd/mm/yyyy');
-      let dateEntry = new Date(res.data[i]['attributes']['field_created']);
-      let dateToday = new Date();
+        let dateEntry = new Date(res.data[i]['attributes']['field_created']);
+        let dateToday = new Date();
 
-      if(dateEntry.getDay() == dateToday.getDay()){
-        this.bool = false;
-      }
-
-
-      console.log(dateEntry, dateToday);
+        if (dateEntry.getDay() == dateToday.getDay()) {
+          this.bool = false;
+        }
 
       }
 
       console.log(this.profile_id);
-    } catch ( error ) {
-      console.error( error );
+    } catch (error) {
+      console.error(error);
     }
   }
 
-public async deleteEntry(id: number) {
+  public async deleteEntry(id: number) {
 
-  try {
+    try {
 
       const httpOptionsPatch = {
         headers: new HttpHeaders({
@@ -126,14 +113,14 @@ public async deleteEntry(id: number) {
         .subscribe(event => {
           console.log(event);
           this.refresh_token();
-          this.refreshPage();     
-           })
+          this.refreshPage();
+        })
 
-  } catch (error) {
-    console.error(error);
+    } catch (error) {
+      console.error(error);
+    }
+
   }
-
-}
 
 
   public async getProfile(): Promise<void> {
@@ -143,18 +130,18 @@ public async deleteEntry(id: number) {
 
     try {
 
-      await this.http.get<JsonObject>('http://localhost:8888/jsonapi/profile/user', {params: params})
-      .subscribe(event => {
-        this.profile = event.data;
-        this.profile_id = event.data[0]["id"]
-        this.getEntries();
+      await this.http.get<JsonObject>('http://localhost:8888/jsonapi/profile/user', { params: params })
+        .subscribe(event => {
+          this.profile = event.data;
+          this.profile_id = event.data[0]["id"]
+          this.getEntries();
 
-      });
-      
-     
-      
-    } catch ( error ) {
-      console.error( error );
+        });
+
+
+
+    } catch (error) {
+      console.error(error);
     }
   }
 
@@ -183,6 +170,6 @@ public async deleteEntry(id: number) {
     return refresh
   }
 
-  
+
 
 }

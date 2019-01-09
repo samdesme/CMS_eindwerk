@@ -92,13 +92,11 @@ $url_2: url(../../../assets/fonts/Avenir-Medium.ttf);
 
 }
 
-/* Styles for the active tab label */
 .mat-tab-label.mat-tab-label-active {
 	background-color: $white;
     color: $black;
 }
 
-/* Styles for the ink bar */
 .mat-ink-bar {
 	background-color: $black;
 	width: 50%!important;

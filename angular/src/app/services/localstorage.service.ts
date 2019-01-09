@@ -18,8 +18,6 @@ export class LocalstorageService {
     this.storageSub.next(true);
   }
 
-
-
   removeItem(key: string) {
     localStorage.removeItem(key);
     this.storageSub.next(false);

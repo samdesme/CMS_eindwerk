@@ -9,11 +9,10 @@ import { HttpHeaders } from "@angular/common/http";
   providedIn: "root"
 })
 export class UserService {
+  
   tokenApiURL = `http://localhost:8888/oauth/token`;
   userApiURL = `http://localhost:8888/entity/user?_format=json`;
   fetchUserURL = 'http://localhost:8888/jsonapi/user/user';
-
-  
 
   private axiosClient: AxiosInstance;
   constructor() {

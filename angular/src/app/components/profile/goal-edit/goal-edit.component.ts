@@ -1,16 +1,13 @@
 import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
-import { Profile, Attributes } from '../../../models/profile';
+import { Profile } from '../../../models/profile';
 import { User } from '../../../models/user';
 import { Goal } from '../../../models/goal';
-
-import { ProfileService } from './../../../services/profile.service';
-import { AuthService } from './../../../services/auth.service';
 import { UserService } from "../../../services/user.service";
 import { GoalService } from "../../../services/goal.service";
 
 import { JsonObject } from '../../../models/json';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HttpParams, HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 
 @Component({
@@ -36,11 +33,9 @@ export class GoalEditComponent implements OnInit {
 
 
   constructor(
-    private profileService: ProfileService,
-    private authService: AuthService,
-    private userService: UserService,
-   private goalService: GoalService,
 
+    private userService: UserService,
+    private goalService: GoalService,
     private router: Router,
     private route: ActivatedRoute,
     private http: HttpClient
@@ -53,7 +48,7 @@ export class GoalEditComponent implements OnInit {
 
     this.id = this.route.snapshot.paramMap.get('id');
     this.getUser();
-   this.getGoal();
+    this.getGoal();
   }
 
   changeMsg(string): void {
@@ -62,7 +57,7 @@ export class GoalEditComponent implements OnInit {
 
 
   public async getUser(): Promise<void> {
-    
+
     try {
       const res = await this.userService.getUser<JsonObject>(this.id);
       this.uid = res.data["id"]
@@ -75,23 +70,23 @@ export class GoalEditComponent implements OnInit {
 
   parseDate(dateString: string): Date {
     if (dateString) {
-        return new Date(dateString);
+      return new Date(dateString);
     } else {
-        return null;
+      return null;
     }
-}
+  }
 
   public async getGoal(): Promise<void> {
-      const res = await this.goalService.getGoals<JsonObject>(this.id);
+    const res = await this.goalService.getGoals<JsonObject>(this.id);
 
-      this.isActive = res.data[0]["attributes"]["status"];
-      this.goal = res.data[0];
-      this.goal_id = res.data[0]["attributes"]["drupal_internal__nid"]
-      
+    this.isActive = res.data[0]["attributes"]["status"];
+    this.goal = res.data[0];
+    this.goal_id = res.data[0]["attributes"]["drupal_internal__nid"]
 
-      if(this.isActive == false){
-        this.router.navigate(["profile"]);
-      }
+
+    if (this.isActive == false) {
+      this.router.navigate(["profile"]);
+    }
 
   }
 
@@ -122,7 +117,7 @@ export class GoalEditComponent implements OnInit {
           ],
           field_average: [
             {
-              value: Math.round( nAverage * 10 ) / 10
+              value: Math.round(nAverage * 10) / 10
             }
           ],
 

@@ -2,17 +2,13 @@ import { Component, OnInit, ViewChild, Input, TemplateRef, ViewEncapsulation } f
 import { Profile } from '../../../models/profile';
 import { User } from '../../../models/user';
 import { Entry } from '../../../models/entry';
-
 import { ProfileService } from '../../../services/profile.service';
 import { UserService } from '../../../services/user.service';
 import { EntryService } from "../../../services/entry.service";
-
 import { JsonObject } from '../../../models/json';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProfileImg, ImgAttributes } from '../../../models/profile_picture';
-import { LocalstorageService } from "../../../services/localstorage.service";
 import { HttpParams, HttpClient } from '@angular/common/http';
-import { HttpHeaders } from '@angular/common/http';
 import { DatePipe } from '@angular/common'
 
 
@@ -31,8 +27,6 @@ export class StatsComponent implements OnInit {
   public profile: Profile;
   public user: User[];
   public entries: Entry[];
-
-
   public profile_picture: ProfileImg[];
 
   id = localStorage.getItem("uuid");
@@ -45,10 +39,8 @@ export class StatsComponent implements OnInit {
   @ViewChild('navTemplate', { read: TemplateRef }) navTemplate: TemplateRef<any>;
 
   constructor(
-    private profileService: ProfileService,
     private userService: UserService,
     private entryService: EntryService,
-
     private router: Router,
     private http: HttpClient
 
@@ -71,7 +63,7 @@ export class StatsComponent implements OnInit {
 
 
   public lineChartColors: Array<any> = [
-    { // grey
+    {
       backgroundColor: 'rgba(255,255,255,0)',
       borderColor: 'rgba(255,255,255,1)',
       pointBackgroundColor: 'rgba(255,255,255,1)',
@@ -152,9 +144,9 @@ export class StatsComponent implements OnInit {
           timeDiff = riseT.getHours() - bedT.getHours();
 
         } else {
-          timeDiff = riseT.getHours() + (12 - (bedT.getHours()- 12));
+          timeDiff = riseT.getHours() + (12 - (bedT.getHours() - 12));
 
-        } 
+        }
 
         let diff = Math.round(Math.abs(timeDiff));
         this.dataHours.push(Number(diff));

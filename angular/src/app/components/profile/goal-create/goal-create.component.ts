@@ -1,12 +1,6 @@
 import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { Profile, Attributes } from '../../../models/profile';
 import { User } from '../../../models/user';
-
-import { ProfileImg, ImgAttributes } from '../../../models/profile_picture';
-import { NewFile } from '../../../models/file';
-
-import { ProfileService } from './../../../services/profile.service';
-import { AuthService } from './../../../services/auth.service';
 import { UserService } from "../../../services/user.service";
 import { GoalService } from "../../../services/goal.service";
 
@@ -26,7 +20,6 @@ export class GoalCreateComponent implements OnInit {
   public profile: Profile[];
   public user: User[];
 
-
   fileName: string = '';
   msg: string = '';
   uid: number;
@@ -39,11 +32,10 @@ export class GoalCreateComponent implements OnInit {
   token;
 
   constructor(
-    private profileService: ProfileService,
-    private authService: AuthService,
     private userService: UserService,
-   private goalService: GoalService,
+    private authService: UserService,
 
+    private goalService: GoalService,
     private router: Router,
     private route: ActivatedRoute,
     private http: HttpClient
@@ -56,8 +48,7 @@ export class GoalCreateComponent implements OnInit {
     this.id = this.route.snapshot.paramMap.get('id');
     this.getUser();
     this.getProfile();
-   // this.checkGoal();
-   
+
   }
 
   changeMsg(string): void {
@@ -99,12 +90,12 @@ export class GoalCreateComponent implements OnInit {
   }
 
   public async checkGoal(): Promise<void> {
-      const res = await this.goalService.getGoals<JsonObject>(this.id);
-      this.isActive = res.data[0]["attributes"]["status"]
+    const res = await this.goalService.getGoals<JsonObject>(this.id);
+    this.isActive = res.data[0]["attributes"]["status"]
 
-      if(this.isActive == true){
-        this.router.navigate(["profile"]);
-      }
+    if (this.isActive == true) {
+      this.router.navigate(["profile"]);
+    }
   }
 
   public async createGoal(date, average) {
@@ -113,7 +104,7 @@ export class GoalCreateComponent implements OnInit {
     let nAverage = average.value
 
     console.log(localStorage.getItem("access_token"))
-    
+
     try {
       if (dt != null && nAverage != null) {
         const httpOptionsPatch = {
@@ -125,8 +116,8 @@ export class GoalCreateComponent implements OnInit {
         let body: any =
         {
           type: "goals",
-          status: [{value: 1}],
-          title: [{value: "Goal " + String(dt)}],
+          status: [{ value: 1 }],
+          title: [{ value: "Goal " + String(dt) }],
           field_profile_id: [
             {
               target_id: this.profile_id,
@@ -136,8 +127,8 @@ export class GoalCreateComponent implements OnInit {
             }
           ],
           field_goal: [{ value: dt }],
-          field_achieved: [{value: 0}],
-          field_average: [{value: Math.round( nAverage * 10 ) / 10}],
+          field_achieved: [{ value: 0 }],
+          field_average: [{ value: Math.round(nAverage * 10) / 10 }],
 
         }
 

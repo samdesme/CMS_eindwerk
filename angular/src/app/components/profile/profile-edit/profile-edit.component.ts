@@ -11,16 +11,14 @@ import { UserService } from "../../../services/user.service";
 
 import { JsonObject } from '../../../models/json';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HttpParams, HttpClient, HttpHeaders} from '@angular/common/http';
-import axios from 'axios';
-import { DatePipe } from '@angular/common';
+import { HttpParams, HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-profile-edit',
   templateUrl: './profile-edit.component.html',
   styleUrls: ['./profile-edit.component.scss'],
 
-  
+
 })
 export class ProfileEditComponent implements OnInit {
   public profile: Profile[];
@@ -40,19 +38,14 @@ export class ProfileEditComponent implements OnInit {
   selectedFile: File;
   userDate;
   token;
-  
-  constructor(
-    private profileService: ProfileService,
-    private authService: AuthService,
-    private userService: UserService,
 
+  constructor(
+    private userService: UserService,
     private router: Router,
     private route: ActivatedRoute,
     private http: HttpClient,
 
-
-
-  ) { 
+  ) {
 
   }
 
@@ -69,22 +62,21 @@ export class ProfileEditComponent implements OnInit {
     this.changeName(this.selectedFile.name);
   }
 
-  changeName(string):void{
+  changeName(string): void {
     this.fileName = string;
-   }
+  }
 
-   changeMsg(string):void{
+  changeMsg(string): void {
     this.msg = string;
-   }
-  
+  }
+
 
   public async getUser(): Promise<void> {
     try {
       const res = await this.userService.getUser<JsonObject>(this.id);
       this.user = res.data;
-      //console.log(this.profile);
-    } catch ( error ) {
-      console.error( error );
+    } catch (error) {
+      console.error(error);
     }
   }
 
@@ -92,9 +84,9 @@ export class ProfileEditComponent implements OnInit {
     try {
       const res = await this.userService.getUser<JsonObject>(this.id);
       this.uid = res.data["attributes"]["drupal_internal__uid"]
-  
-    } catch ( error ) {
-      console.error( error );
+
+    } catch (error) {
+      console.error(error);
     }
   }
 
@@ -105,151 +97,150 @@ export class ProfileEditComponent implements OnInit {
 
     try {
 
-      await this.http.get<JsonObject>('http://localhost:8888/jsonapi/profile/user', {params: params})
-      .subscribe(event => {
+      await this.http.get<JsonObject>('http://localhost:8888/jsonapi/profile/user', { params: params })
+        .subscribe(event => {
 
-        this.profile_id = event.data[0]["attributes"]["drupal_internal__profile_id"];
-        this.profile = event.data[0];
-        //this.userDate = new DatePipe('en-US').transform(event.data[0]["attributes"]["field_birthday"], 'dd/MM/yyyy')
-        
-      });
-      
-     
-      
-    } catch ( error ) {
-      console.error( error );
+          this.profile_id = event.data[0]["attributes"]["drupal_internal__profile_id"];
+          this.profile = event.data[0];
+
+        });
+
+
+
+    } catch (error) {
+      console.error(error);
     }
   }
 
 
-public postFile(birthday, location, school, tagline) {
- let uuid;
+  public postFile(birthday, location, school, tagline) {
+    let uuid;
     try {
 
 
       const httpOptions = {
         headers: new HttpHeaders({
-        'Content-Type':  'application/octet-stream',
-        'Content-Disposition': `file; filename="${this.selectedFile.name}"`,
-        'Authorization': localStorage.getItem("access_token")
-       })
-   };
-  
-    this.http.post<NewFile>('http://localhost:8888/file/upload/profile/user/field_profile_picture?_format=json', this.selectedFile, httpOptions)
-    .subscribe(event => {
-      uuid = event.fid[0]["value"];
+          'Content-Type': 'application/octet-stream',
+          'Content-Disposition': `file; filename="${this.selectedFile.name}"`,
+          'Authorization': localStorage.getItem("access_token")
+        })
+      };
 
-      this.refresh_token().then(response => {
-        if(response){
-          this.patchProfileInfo(uuid, birthday, location, school, tagline)
+      this.http.post<NewFile>('http://localhost:8888/file/upload/profile/user/field_profile_picture?_format=json', this.selectedFile, httpOptions)
+        .subscribe(event => {
+          uuid = event.fid[0]["value"];
 
-        } 
-      })
-    });
+          this.refresh_token().then(response => {
+            if (response) {
+              this.patchProfileInfo(uuid, birthday, location, school, tagline)
+
+            }
+          })
+        });
 
 
-    } catch ( error ) {
-      console.error( error );
+    } catch (error) {
+      console.error(error);
     }
 
-   
+
   }
 
-  public patchUserInfo(strName){
+  public patchUserInfo(strName) {
 
 
     const httpOptionsPatch = {
       headers: new HttpHeaders({
-      'Content-Type':  'application/json',
-      'Authorization': localStorage.getItem("access_token")
-     })
-  };
-    
-    let request : any = 
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.getItem("access_token")
+      })
+    };
+
+    let request: any =
     {
       name: [
         {
-        value: strName
+          value: strName
         }
       ]
     }
 
     this.http.patch(`http://localhost:8888/user/${this.uid}?_format=json`, request, httpOptionsPatch)
-    .subscribe(event => {
+      .subscribe(event => {
 
-      console.log(event);
-      
-    });
+        console.log(event);
+
+      });
   }
 
-  public patchProfileInfo(rev_id, birthday, location, school, tagline){
+  public patchProfileInfo(rev_id, birthday, location, school, tagline) {
 
     let jsonObj: Object;
 
     const httpOptionsPatch = {
       headers: new HttpHeaders({
-      'Content-Type':  'application/json',
-      'Authorization': localStorage.getItem("access_token")
-     })
-  };
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.getItem("access_token")
+      })
+    };
 
-  let body : any = 
-  {
-    type: "user",
-    field_birthday: [
-      {
-      value: birthday
-      }
-    ],
-    field_location: [
-      {
-      value: location
-      }
-    ],
-    field_school: [
-      {
-      value: school
-      }
-    ],
-    field_tagline: [
-      {
-      value: tagline
-      }
-    ]
-  }
-  
-    let bodyFile : any = 
+    let body: any =
     {
       type: "user",
-      field_profile_picture: [
+      field_birthday: [
         {
-        target_id: rev_id
+          value: birthday
+        }
+      ],
+      field_location: [
+        {
+          value: location
+        }
+      ],
+      field_school: [
+        {
+          value: school
+        }
+      ],
+      field_tagline: [
+        {
+          value: tagline
         }
       ]
     }
 
-    if(rev_id != null){
-        jsonObj = Object.assign(body, bodyFile);
+    let bodyFile: any =
+    {
+      type: "user",
+      field_profile_picture: [
+        {
+          target_id: rev_id
+        }
+      ]
+    }
+
+    if (rev_id != null) {
+      jsonObj = Object.assign(body, bodyFile);
     } else {
-        jsonObj = body
+      jsonObj = body
     }
 
     this.http.patch(`http://localhost:8888/profile/${this.profile_id}?_format=json`, jsonObj, httpOptionsPatch)
-    .subscribe(event => {
-      console.log(event);
+      .subscribe(event => {
+        console.log(event);
 
-      this.refresh_token().then(response => {
-        if(response){
-          this.router.navigate(["profile"]);
-        }
-      })
+        this.refresh_token().then(response => {
+          if (response) {
+            this.router.navigate(["profile"]);
+          }
+        })
 
-    });
+      });
   }
 
-  
 
-  public editProfile(name, birthday, location, school, tagline){
+
+  public editProfile(name, birthday, location, school, tagline) {
     let strName = name.value
     let strDate = birthday.value
     let strLoc = location.value
@@ -257,33 +248,32 @@ public postFile(birthday, location, school, tagline) {
     let strTag = tagline.value
     try {
 
-     if (strName != "" && strDate != "" && strLoc != "" && strSchool != ""){
+      if (strName != "" && strDate != "" && strLoc != "" && strSchool != "") {
 
-      this.patchUserInfo(strName);
+        this.patchUserInfo(strName);
 
-      if(this.selectedFile != null){
+        if (this.selectedFile != null) {
 
-        this.postFile(strDate, strLoc, strSchool, strTag );
+          this.postFile(strDate, strLoc, strSchool, strTag);
 
-      } else {
-        
-       this.patchProfileInfo(null, strDate, strLoc, strSchool, strTag);
+        } else {
+
+          this.patchProfileInfo(null, strDate, strLoc, strSchool, strTag);
+
+        }
 
       }
 
-     }
-   
-     else
-     {
-      this.changeMsg("Vul de verplichte velden in!")
-     }
+      else {
+        this.changeMsg("Vul de verplichte velden in!")
+      }
 
-    } catch ( error ) {
-      console.error( error );
+    } catch (error) {
+      console.error(error);
     }
   }
 
-  private refresh_token(): Promise<boolean>{
+  private refresh_token(): Promise<boolean> {
     let formData = new FormData();
 
     const data = {
@@ -297,16 +287,16 @@ public postFile(birthday, location, school, tagline) {
     }
     let refresh = this.userService.new_access_token(formData).then(res => {
 
-        let access_token = res.data["access_token"]
-        let refresh_token = res.data["refresh_token"]
+      let access_token = res.data["access_token"]
+      let refresh_token = res.data["refresh_token"]
 
-        localStorage.setItem("access_token", "Bearer " + access_token);
-        localStorage.setItem("refresh_token", refresh_token);
+      localStorage.setItem("access_token", "Bearer " + access_token);
+      localStorage.setItem("refresh_token", refresh_token);
 
-        return true
-  });
-  return refresh
-}
+      return true
+    });
+    return refresh
+  }
 
 
 }

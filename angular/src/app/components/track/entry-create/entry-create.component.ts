@@ -1,17 +1,11 @@
 import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { Profile, Attributes } from '../../../models/profile';
 import { User } from '../../../models/user';
-
-import { ProfileImg, ImgAttributes } from '../../../models/profile_picture';
-import { NewFile } from '../../../models/file';
-
 import { DatePipe } from '@angular/common'
-
 import { ProfileService } from './../../../services/profile.service';
 import { AuthService } from './../../../services/auth.service';
 import { UserService } from "../../../services/user.service";
 import { GoalService } from "../../../services/goal.service";
-
 import { JsonObject } from '../../../models/json';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpParams, HttpClient, HttpHeaders } from '@angular/common/http';
@@ -48,11 +42,7 @@ export class EntryCreateComponent implements OnInit {
   token;
 
   constructor(
-    private profileService: ProfileService,
-    private authService: AuthService,
     private userService: UserService,
-   private goalService: GoalService,
-
     private router: Router,
     private route: ActivatedRoute,
     private http: HttpClient
@@ -65,7 +55,7 @@ export class EntryCreateComponent implements OnInit {
     this.id = this.route.snapshot.paramMap.get('id');
     this.getUser();
     this.getProfile();
-   
+
   }
 
   changeMsg(string): void {
@@ -96,7 +86,6 @@ export class EntryCreateComponent implements OnInit {
           this.profile_id = event.data[0]["attributes"]["drupal_internal__profile_id"];
           this.profile_uid = event.data[0]["id"]
 
-          console.log(this.profile_uid, this.profile_id)
         });
 
 
@@ -125,8 +114,6 @@ export class EntryCreateComponent implements OnInit {
     let dateFormat = this.datepipe.transform(timestamp, 'yyyy-MM-dd');
 
 
-    console.log(localStorage.getItem("access_token"))
-    
     try {
       if (bed != null && rise != null && this.scoreQuality != null && this.scoreRested != null) {
 
@@ -139,8 +126,7 @@ export class EntryCreateComponent implements OnInit {
         let body: any =
         {
           type: "entries",
-         // status: [{value: 1}],
-          title: [{value: "Entry " + timestamp.toLocaleString()}],
+          title: [{ value: "Entry " + timestamp.toLocaleString() }],
           field_profile: [
             {
               target_id: this.profile_id,
@@ -150,13 +136,13 @@ export class EntryCreateComponent implements OnInit {
             }
           ],
           field_bedtime: [{ value: bed }],
-          field_risen: [{value: rise}],
-          field_note: [{value: note}],
+          field_risen: [{ value: rise }],
+          field_note: [{ value: note }],
 
-          field_quality: [{value: this.scoreQuality}],
-          field_rested: [{value: this.scoreRested}],
+          field_quality: [{ value: this.scoreQuality }],
+          field_rested: [{ value: this.scoreRested }],
 
-          field_created: [{value: dateFormat}],
+          field_created: [{ value: dateFormat }],
 
         }
 

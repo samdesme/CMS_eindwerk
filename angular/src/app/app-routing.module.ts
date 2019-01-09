@@ -12,7 +12,6 @@ import { TestComponent } from './components/profile/test/test.component';
 import { EntryComponent } from './components/track/entries.component';
 import { EntryCreateComponent } from './components/track/entry-create/entry-create.component';
 import { EntryEditComponent } from './components/track/entry-edit/entry-edit.component';
-import { StatsComponent } from './components/track/stats/stats.component';
 import { MapComponent } from './components/map/map.component';
 import { ProfileShowComponent } from './components/map/show/profile-show.component';
 
@@ -32,11 +31,8 @@ const routes: Routes = [
   { path: 'map', component: MapComponent },
   { path: 'map/profile/:id', component: ProfileShowComponent },
 
-
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-
-  
 
 ];
 

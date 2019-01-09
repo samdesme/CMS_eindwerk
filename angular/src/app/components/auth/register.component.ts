@@ -40,7 +40,7 @@ export class RegisterComponent implements OnInit {
     private route: ActivatedRoute,
     private http: HttpClient
 
-  ) {}
+  ) { }
 
   ngOnInit() {
     if (localStorage.access_token) {
@@ -48,65 +48,65 @@ export class RegisterComponent implements OnInit {
     }
   }
 
-  changeMsg(string):void{
+  changeMsg(string): void {
     this.msg = string;
-   }
-   
-   public async register(): Promise<void> {
+  }
+
+  public async register(): Promise<void> {
     try {
-      
-      
-    const postObject =  {
-      name: [
-        {
-        value: this.username
-        }
-      ],
-      mail: [
-        {
-        value: this.email
-        }
-      ],
-      pass: [
-        {
-        value: this.password
-        }
-      ],
-      status: [
-        {
+
+
+      const postObject = {
+        name: [
+          {
+            value: this.username
+          }
+        ],
+        mail: [
+          {
+            value: this.email
+          }
+        ],
+        pass: [
+          {
+            value: this.password
+          }
+        ],
+        status: [
+          {
             value: 1
-        }
-    ],
-      roles: [
-        {
+          }
+        ],
+        roles: [
+          {
             target_id: "user",
             target_type: "user_role",
             target_uuid: "c8471d28-69b3-494a-b476-47ca5b8005f0"
-        }
-      ]
-    }
-
-    const jsonResponse = await this.userService.postUser<JsonObject>(postObject).then(res => {
-      if(res){
-        this.login(this.username, this.password)
+          }
+        ]
       }
-      this.response = res;
-    })
 
-    console.log(jsonResponse);
- 
+      const jsonResponse = await this.userService.postUser<JsonObject>(postObject).then(res => {
+        if (res) {
+          this.login(this.username, this.password)
+        }
+        this.response = res;
+      })
 
-    } catch ( error ) {
-      
-     
-      
-      console.error( error );
+      console.log(jsonResponse);
+
+
+    } catch (error) {
+
+
+
+      console.error(error);
     }
 
   }
 
-  login(logName:string, logPass:string) {
-    
+  login(logName: string, logPass: string) {
+
     let formData = new FormData();
     let user_id;
     let user_uid;
@@ -129,79 +129,79 @@ export class RegisterComponent implements OnInit {
       let params = new HttpParams();
       params = params.append('filter[name]', this.username);
 
-      this.http.get<JsonObject>('http://localhost:8888/jsonapi/user/user', {params: params})
-      .subscribe(event => {
+      this.http.get<JsonObject>('http://localhost:8888/jsonapi/user/user', { params: params })
+        .subscribe(event => {
 
-        user_id = event.data[0]["id"] 
-        user_uid = event.data[0]["attributes"]["drupal_internal__uid"]
+          user_id = event.data[0]["id"]
+          user_uid = event.data[0]["attributes"]["drupal_internal__uid"]
 
-        localStorage.setItem("uuid", user_id);
-        localStorage.setItem("access_token", "Bearer " + res.data.access_token);
-        localStorage.setItem("refresh_token", res.data.refresh_token);
+          localStorage.setItem("uuid", user_id);
+          localStorage.setItem("access_token", "Bearer " + res.data.access_token);
+          localStorage.setItem("refresh_token", res.data.refresh_token);
 
-        this.createProfile(user_id, user_uid, "Bearer " + res.data.access_token)
+          this.createProfile(user_id, user_uid, "Bearer " + res.data.access_token)
 
-      });
+        });
 
     }
-    
-    
+
+
     ).catch((err) => {
       this.changeMsg(this.response)
-    console.error(err);
-    
+      console.error(err);
+
     }
     );
   }
 
-  createProfile(id: string, uid: number, token){
+  createProfile(id: string, uid: number, token) {
 
-    
-    const postObject =  {
+
+    const postObject = {
       type: "user",
       uid: [
         {
-            target_id: uid,
-            target_type: "user",
-            target_uuid: id,
-            url: "/user/" + id.toString()
+          target_id: uid,
+          target_type: "user",
+          target_uuid: id,
+          url: "/user/" + id.toString()
         }
-    ],
-    field_birthday: [
-      {
+      ],
+      field_birthday: [
+        {
           value: this.birthday
-      },
-    ],
-    field_location: [
-      {
+        },
+      ],
+      field_location: [
+        {
           value: this.location
-      },
-    ],
-    field_school: [
-      {
+        },
+      ],
+      field_school: [
+        {
           value: this.school
-      },
-    ],
-    field_tagline: [
-      {
+        },
+      ],
+      field_tagline: [
+        {
           value: this.tagline
-      },
-    ]
+        },
+      ]
     }
 
     this.profileService.postProfile(postObject, token).then(res => {
-        if(res){
-          this.refresh_token()
-          this.router.navigate(["profile"]);
-        }
+      if (res) {
+        this.refresh_token()
+        this.router.navigate(["profile"]);
+      }
     }).catch((err) => {
       console.error(err);
 
-      }
-      );
+    }
+    );
   }
 
-  private refresh_token(): Promise<boolean>{
+  private refresh_token(): Promise<boolean> {
     let formData = new FormData();
 
     const data = {
@@ -215,15 +215,15 @@ export class RegisterComponent implements OnInit {
     }
     let refresh = this.userService.new_access_token(formData).then(res => {
 
-        let access_token = res.data["access_token"]
-        let refresh_token = res.data["refresh_token"]
+      let access_token = res.data["access_token"]
+      let refresh_token = res.data["refresh_token"]
 
-        localStorage.setItem("access_token", "Bearer " + access_token);
-        localStorage.setItem("refresh_token", refresh_token);
+      localStorage.setItem("access_token", "Bearer " + access_token);
+      localStorage.setItem("refresh_token", refresh_token);
 
-        return true
-  });
-  return refresh
-}
+      return true
+    });
+    return refresh
+  }
 
 }

@@ -1,6 +1,7 @@
 import { Observable, of } from 'rxjs';
 import { Injectable } from '@angular/core';
 import axios from 'axios';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +9,9 @@ import axios from 'axios';
 export class AuthService {
 
   public fetchURL = 'http://localhost:8888/oauth/token';
-  constructor() {}
+  constructor(
+    private userService: UserService,
+  ) {}
 
   public async getToken<T>(): Promise<T> {
     try {
@@ -30,5 +33,28 @@ export class AuthService {
     };
   }
 
+  public async refresh_token(): Promise<boolean> {
+    let formData = new FormData();
 
+    const data = {
+      grant_type: "refresh_token",
+      refresh_token: localStorage.getItem("refresh_token"),
+      client_id: "33a7b468-55ea-4e65-99c5-09bc8ea061e9",
+      client_secret: "root",
+    };
+    for (let key in data) {
+      formData.append(key, data[key]);
+    }
+    let refresh = this.userService.new_access_token(formData).then(res => {
+
+      let access_token = res.data["access_token"]
+      let refresh_token = res.data["refresh_token"]
+
+      localStorage.setItem("access_token", "Bearer " + access_token);
+      localStorage.setItem("refresh_token", refresh_token);
+
+      return true
+    });
+    return refresh
+  }
 }

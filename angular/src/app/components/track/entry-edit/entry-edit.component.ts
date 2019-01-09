@@ -1,12 +1,9 @@
 import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import { Profile, Attributes } from '../../../models/profile';
 import { User } from '../../../models/user';
-
 import { DatePipe } from '@angular/common'
-
 import { UserService } from "../../../services/user.service";
 import { EntryService } from "../../../services/entry.service";
-
 import { JsonObject } from '../../../models/json';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpParams, HttpClient, HttpHeaders } from '@angular/common/http';
@@ -53,7 +50,6 @@ export class EntryEditComponent implements OnInit {
   constructor(
     private userService: UserService,
     private entryService: EntryService,
-
     private router: Router,
     private route: ActivatedRoute,
     private http: HttpClient

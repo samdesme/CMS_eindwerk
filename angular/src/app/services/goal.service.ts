@@ -7,13 +7,9 @@ import { Observable, of } from 'rxjs';
   providedIn: "root"
 })
 export class GoalService {
-  postGoalURL = 'http://localhost:8888/node?_format=json';
   getGoalURL = 'http://localhost:8888/jsonapi/node/goals';
-  
 
-  private axiosClient: AxiosInstance;
   constructor() {
-    this.axiosClient = axios.create();
   }
 
 
@@ -27,25 +23,6 @@ export class GoalService {
 
     } catch (error) {
       return Promise.reject(this.handleError(error));
-    }
-  }
-
-  public async postGoal<T>(body: Object, token:string): Promise<T> {
-    try {
-        const axiosResponse = await axios.request<T>({
-            method: 'post',
-            url: `${this.postGoal}`,
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': token
-    
-          },
-            data: body
-           
-        });
-        return( axiosResponse.data );
-    } catch (e) {
-      return e.response["data"]["message"];
     }
   }
 

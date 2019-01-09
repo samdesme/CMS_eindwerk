@@ -8,9 +8,8 @@ import { UserService } from '../../services/user.service';
 import { EntryService } from "../../services/entry.service";
 
 import { JsonObject } from '../../models/json';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { ProfileImg } from '../../models/profile_picture';
-import { LocalstorageService } from "../../services/localstorage.service";
 import { HttpParams, HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 import { DatePipe } from '@angular/common'
@@ -22,7 +21,7 @@ import { DatePipe } from '@angular/common'
   styleUrls: ['./map.component.scss'],
   encapsulation: ViewEncapsulation.None
 
-  
+
 })
 export class MapComponent implements OnInit {
   public profile: Profile;
@@ -32,7 +31,7 @@ export class MapComponent implements OnInit {
 
   lat: number;
   lng: number;
-  
+
   public profile_picture: ProfileImg[];
   id = localStorage.getItem("uuid");
 
@@ -42,18 +41,14 @@ export class MapComponent implements OnInit {
   bool: Boolean;
   location = {};
 
-  
 
-  @ViewChild('navTemplate', {read: TemplateRef}) navTemplate: TemplateRef<any>;
+
+  @ViewChild('navTemplate', { read: TemplateRef }) navTemplate: TemplateRef<any>;
 
 
   constructor(
-    private profileService: ProfileService,
     private userService: UserService,
-    private entryService: EntryService,
-
-
-    private router: Router, 
+    private router: Router,
     private http: HttpClient
 
 
@@ -62,18 +57,18 @@ export class MapComponent implements OnInit {
   ngOnInit() {
 
     if (localStorage.access_token) {
-        console.log(this.id)
+      console.log(this.id)
 
       this.bool = true;
       this.getUser();
 
-      if(navigator.geolocation){
+      if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(this.setPosition.bind(this));
       };
 
       this.getProfile();
       this.getAllProfiles();
-  
+
 
     }
     else {
@@ -84,46 +79,46 @@ export class MapComponent implements OnInit {
 
   refreshPage(): void {
     window.location.reload();
-}
+  }
 
-setPosition(position){
-  this.location = position.coords;
-  this.lng = this.location["longitude"]
-  this.lat = this.location["latitude"]
-  
- 
+  setPosition(position) {
+    this.location = position.coords;
+    this.lng = this.location["longitude"]
+    this.lat = this.location["latitude"]
 
-  //this.setGeoProfile(this.lat, this.lng)
-}
+
+
+    //this.setGeoProfile(this.lat, this.lng)
+  }
 
   public async getUser(): Promise<void> {
     try {
       const res = await this.userService.getUser<JsonObject>(this.id);
       this.user = res.data;
       console.log(this.user);
-    } catch ( error ) {
-      console.error( error );
+    } catch (error) {
+      console.error(error);
     }
   }
 
-   distance(lat1, lon1, lat2, lon2, unit) {
+  calcDistance(lat1, lon1, lat2, lon2, unit) {
     if ((lat1 == lat2) && (lon1 == lon2)) {
       return 0;
     }
     else {
-      var radlat1 = Math.PI * lat1/180;
-      var radlat2 = Math.PI * lat2/180;
-      var theta = lon1-lon2;
-      var radtheta = Math.PI * theta/180;
+      var radlat1 = Math.PI * lat1 / 180;
+      var radlat2 = Math.PI * lat2 / 180;
+      var theta = lon1 - lon2;
+      var radtheta = Math.PI * theta / 180;
       var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
       if (dist > 1) {
         dist = 1;
       }
       dist = Math.acos(dist);
-      dist = dist * 180/Math.PI;
+      dist = dist * 180 / Math.PI;
       dist = dist * 60 * 1.1515;
-      if (unit=="K") { dist = dist * 1.609344 }
-      if (unit=="N") { dist = dist * 0.8684 }
+      if (unit == "K") { dist = dist * 1.609344 }
+      if (unit == "N") { dist = dist * 0.8684 }
       return dist;
     }
   }
@@ -136,17 +131,17 @@ setPosition(position){
 
     try {
 
-      await this.http.get<JsonObject>('http://localhost:8888/jsonapi/profile/user', {params: params})
-      .subscribe(event => {
-        this.profile = event.data;
-        this.profile_id = event.data[0]["attributes"]["drupal_internal__profile_id"];
+      await this.http.get<JsonObject>('http://localhost:8888/jsonapi/profile/user', { params: params })
+        .subscribe(event => {
+          this.profile = event.data;
+          this.profile_id = event.data[0]["attributes"]["drupal_internal__profile_id"];
 
-       
 
-      });
-  
-    } catch ( error ) {
-      console.error( error );
+
+        });
+
+    } catch (error) {
+      console.error(error);
     }
   }
 
@@ -156,36 +151,35 @@ setPosition(position){
     try {
 
       await this.http.get<JsonObject>('http://localhost:8888/jsonapi/profile/user')
-      .subscribe(event => {
+        .subscribe(event => {
 
-        this.profiles = event.data;
-        for (let i = 0; i < event.data.length; i++) {
+          this.profiles = event.data;
+          for (let i = 0; i < event.data.length; i++) {
 
-        let uid = event.data[i]["relationships"]["uid"]["data"]["id"];
-        let id = event.data[i]["id"];
+            let uid = event.data[i]["relationships"]["uid"]["data"]["id"];
+            let id = event.data[i]["id"];
 
-        this.http.get<JsonObject>(`http://localhost:8888/jsonapi/user/user/${uid}`)
-          .subscribe(event => {
-            
-            this.profiles[i].username = event.data["attributes"]["name"]
-            
-          })
+            this.http.get<JsonObject>(`http://localhost:8888/jsonapi/user/user/${uid}`)
+              .subscribe(event => {
 
-        this.http.get<JsonObject>(`http://localhost:8888/jsonapi/profile/user/${id}/field_profile_picture`)
-          .subscribe(event => {
-            this.profiles[i].profile_img = event.data
-            console.log(event.data);
+                this.profiles[i].username = event.data["attributes"]["name"]
 
-          })
+              })
 
-          this.profiles[i].attributes.distance = Number(this.distance(this.lat, this.lng, this.profiles[i].attributes.field_lat, this.profiles[i].attributes.field_lng, "K").toFixed(1))
-         // console.log(this.lat, this.lng, this.profiles[i].attributes.field_lat, this.profiles[i].attributes.field_lng)
-        }
-      });
-      
-  
-    } catch ( error ) {
-      console.error( error );
+            this.http.get<JsonObject>(`http://localhost:8888/jsonapi/profile/user/${id}/field_profile_picture`)
+              .subscribe(event => {
+                this.profiles[i].profile_img = event.data
+                console.log(event.data);
+
+              })
+
+            this.profiles[i].attributes.distance = Number(this.calcDistance(this.lat, this.lng, this.profiles[i].attributes.field_lat, this.profiles[i].attributes.field_lng, "K").toFixed(1))
+          }
+        });
+
+
+    } catch (error) {
+      console.error(error);
     }
   }
 
@@ -194,12 +188,12 @@ setPosition(position){
 
     try {
 
-        const httpOptionsPatch = {
-          headers: new HttpHeaders({
-            'Content-Type': 'application/json',
-            'Authorization': localStorage.getItem("access_token")
-          })
-        };
+      const httpOptionsPatch = {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          'Authorization': localStorage.getItem("access_token")
+        })
+      };
       let body: any =
       {
         type: "user",
@@ -216,11 +210,11 @@ setPosition(position){
       }
 
 
-        this.http.patch(`http://localhost:8888/profile/${this.profile_id}?_format=json`, body, httpOptionsPatch)
-          .subscribe(event => {
-            console.log(event);
-            this.refresh_token();
-          })
+      this.http.patch(`http://localhost:8888/profile/${this.profile_id}?_format=json`, body, httpOptionsPatch)
+        .subscribe(event => {
+          console.log(event);
+          this.refresh_token();
+        })
 
     } catch (error) {
       console.error("error");
@@ -255,9 +249,9 @@ setPosition(position){
   public labelOptions: any = {
     url: '../../../assets/svg/bed.svg',
     scaledSize: {
-        width: 40,
-        height: 60
+      width: 40,
+      height: 60
     }
-}
+  }
 
 }
