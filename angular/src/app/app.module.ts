@@ -12,6 +12,8 @@ import { EntryComponent } from './components/track/entries.component';
 import { EntryCreateComponent } from './components/track/entry-create/entry-create.component';
 import { EntryEditComponent } from './components/track/entry-edit/entry-edit.component';
 import { StatsComponent } from './components/track/stats/stats.component';
+import { MapComponent } from './components/map/map.component';
+import { ProfileShowComponent } from './components/map/show/profile-show.component';
 
 import { StarRatingModule } from 'angular-star-rating';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -20,6 +22,7 @@ import {MatTabsModule} from '@angular/material/tabs';
 import { NavComponent } from './components/nav/nav.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { AgmCoreModule } from '@agm/core';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -40,7 +43,9 @@ import { OrderModule } from 'ngx-order-pipe';
     EntryComponent,
     EntryCreateComponent,
     EntryEditComponent,
-    StatsComponent
+    StatsComponent,
+    MapComponent,
+    ProfileShowComponent
   ],
   imports: [
     BrowserModule,
@@ -51,7 +56,10 @@ import { OrderModule } from 'ngx-order-pipe';
     BrowserAnimationsModule,
     MatTabsModule,
     ChartsModule,
-    OrderModule
+    OrderModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyDrP8Jy6diRTKzGszIq5mkvHXR0Qn62Ro4'
+    })
       ],
   providers: [],
   bootstrap: [AppComponent]

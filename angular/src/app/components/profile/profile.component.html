@@ -41,7 +41,14 @@
                 <p>{{profile.attributes.field_slaap_type}}</p>
 
                 <a routerLink="/profile/test/{{user.id}}" class="btnEdit"><i class="icon fas fa-edit"></i></a>
-                <img class="resIcon" src="../../../../assets/svg/alarm-clock-svgrepo-com.svg">
+               
+                <img *ngIf="profile.attributes.field_slaap_type == 'Morning person'" class="resIcon" src="../../../assets/svg/alarm-clock-svgrepo-com.svg">
+                <img *ngIf="profile.attributes.field_slaap_type == 'Screen addict'" class="resIcon" src="../../../assets/svg/mobile-phone-svgrepo-com.svg">
+                <img *ngIf="profile.attributes.field_slaap_type == 'Panda'" class="resIcon" src="../../../assets/svg/panda-svgrepo-com.svg">
+                <img *ngIf="profile.attributes.field_slaap_type == 'Restless bat'" class="resIcon" src="../../../assets/svg/flying-bat-svgrepo-com.svg">
+                <img *ngIf="profile.attributes.field_slaap_type == 'Sleepyhead'" class="resIcon" src="../../../assets/svg/sleepy-svgrepo-com.svg">
+                <img *ngIf="profile.attributes.field_slaap_type == 'Sleep lover'" class="resIcon" src="../../../assets/svg/pillow-svgrepo-com.svg">
+                <img *ngIf="profile.attributes.field_slaap_type == 'King/Queen of sleep'" class="resIcon" src="../../../assets/svg/crown-svgrepo-com.svg">
 
         </div>
 

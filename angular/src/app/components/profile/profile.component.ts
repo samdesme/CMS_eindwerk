@@ -9,7 +9,7 @@ import { GoalService } from "../../services/goal.service";
 
 import { JsonObject } from '../../models/json';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ProfileImg, ImgAttributes } from '../../models/profile_picture';
+import { ProfileImg } from '../../models/profile_picture';
 import { LocalstorageService } from "../../services/localstorage.service";
 import { HttpParams, HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
@@ -64,7 +64,7 @@ export class ProfileComponent implements OnInit {
   }
 
 
-  public async getToken(): Promise<void> {
+  /* public async getToken(): Promise<void> {
     try {
       
 
@@ -85,7 +85,7 @@ export class ProfileComponent implements OnInit {
       console.error( error );
     }
     
-  }
+  } */
 
   public async getUser(): Promise<void> {
     try {

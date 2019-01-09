@@ -13,6 +13,8 @@ import { EntryComponent } from './components/track/entries.component';
 import { EntryCreateComponent } from './components/track/entry-create/entry-create.component';
 import { EntryEditComponent } from './components/track/entry-edit/entry-edit.component';
 import { StatsComponent } from './components/track/stats/stats.component';
+import { MapComponent } from './components/map/map.component';
+import { ProfileShowComponent } from './components/map/show/profile-show.component';
 
 
 const routes: Routes = [
@@ -27,9 +29,8 @@ const routes: Routes = [
   { path: 'track', component: EntryComponent },
   { path: 'track/add', component: EntryCreateComponent },
   { path: 'track/edit/:id', component: EntryEditComponent },
-  //{ path: 'track/stats', component: StatsComponent },
-
-
+  { path: 'map', component: MapComponent },
+  { path: 'map/profile/:id', component: ProfileShowComponent },
 
 
   { path: 'login', component: LoginComponent },

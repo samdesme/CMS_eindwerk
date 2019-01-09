@@ -62,7 +62,6 @@ export class StatsComponent implements OnInit {
       this.getUser();
       this.getProfile();
       this.getEntries();
-      console.log(this.dataDates)
 
     }
     else {
@@ -144,18 +143,21 @@ export class StatsComponent implements OnInit {
       this.entries = res.data;
 
       for (let i = 0; i < res.data.length; i++) {
-
+        let timeDiff;
         let bedT = new Date("January 1, 1970 " + res.data[i]['attributes']['field_bedtime'])
         let riseT = new Date("January 1, 1970 " + res.data[i]['attributes']['field_risen'])
-        var timeDiff = riseT.getTime() - bedT.getTime();
-        let diff = Math.round(Math.abs(timeDiff / (1000 * 60 * 60)));
         let dateFormat = this.datepipe.transform(res.data[i]['attributes']['field_created'], 'dd MMM');
 
-        if (diff >= 13) {
-          diff = diff - 12
-        }
+        if (riseT.getHours() > bedT.getHours()) {
+          timeDiff = riseT.getHours() - bedT.getHours();
 
-        this.dataHours.push(Number(diff.toFixed(diff)));
+        } else {
+          timeDiff = riseT.getHours() + (12 - (bedT.getHours()- 12));
+
+        } 
+
+        let diff = Math.round(Math.abs(timeDiff));
+        this.dataHours.push(Number(diff));
         this.dataDates.push(dateFormat)
 
         if (i == 7) {
