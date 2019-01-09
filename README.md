@@ -1,6 +1,6 @@
 # Sleeplog
 
-![Alt Text](https://media.giphy.com/media/EfloX6jq4L87vWjjQ2/giphy.gif)
+![](https://gph.is/2CaZich)
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.2.4.
 
