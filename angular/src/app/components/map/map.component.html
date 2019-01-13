@@ -20,7 +20,7 @@
 </div>
 
 <div *ngIf="profiles && user" class="columns is-mobile is-centered">
-  <div class="column userList is-three-quarters-mobile is-two-thirds-tablet is-half-desktop is-one-third-widescreen is-one-third-fullhd ">
+  <div class="column friendList is-three-quarters-mobile is-two-thirds-tablet is-half-desktop is-one-third-widescreen is-one-third-fullhd ">
     <p class="small">Mijn vrienden</p>
     <div *ngFor="let profile of profiles | orderBy:'attributes.distance':false">
 

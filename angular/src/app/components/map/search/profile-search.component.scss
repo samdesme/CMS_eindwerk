@@ -56,31 +56,34 @@ $url_2: url(../../../../assets/fonts/Avenir-Medium.ttf);
 	  }
 }
 
-.listItem{
 
-	&:last-of-type{
-		margin-bottom: -30px;
 
-		hr{
-		
-			visibility: hidden;
-		
-	}
-	}
-	a {
-		
-		color: $black	
-}
-	
-}
-
-.userList {
+.searchList {
 	position: relative;
 	min-height: 50px;
 	background: $white;
 	padding: 0px 15px;
 	margin-bottom: 80px;
 	box-shadow: 3px 3px 6px $black_16;
+
+
+	.listItem{
+
+		&:last-of-type{
+			margin-bottom: -30px;
+	
+			hr{
+			
+				visibility: hidden;
+			
+		}
+		}
+		a {
+			
+			color: $black	
+	}
+		
+	}
 
 .iconAdd {
 	display: block;

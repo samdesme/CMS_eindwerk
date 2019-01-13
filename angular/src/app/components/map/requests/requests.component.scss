@@ -38,42 +38,8 @@ $url_2: url(../../../../assets/fonts/Avenir-Medium.ttf);
 }
 
 
-.small {
-	color: $gray
-}
 
 
-.searchInput{
-	margin-bottom: 25px;
-
-	input[type=text] {
-		padding-left: 40px;
-		border-radius: 25px;
-		background-image: url(../../../../assets/svg/search.svg);
-		background-position: 7px 3px;
-		background-size: 25px;
-
-		background-repeat: no-repeat;
-	  }
-}
-
-.listItem{
-
-	&:last-of-type{
-		margin-bottom: -30px;
-
-		hr{
-		
-			visibility: hidden;
-		
-	}
-	}
-	a {
-		
-		color: $black	
-}
-	
-}
 
 
 .userList {
@@ -83,6 +49,32 @@ $url_2: url(../../../../assets/fonts/Avenir-Medium.ttf);
 	padding: 0px 15px;
 	margin-bottom: 80px;
 	box-shadow: 3px 3px 6px $black_16;
+
+
+	.listItem{
+
+		&:last-of-type{
+			margin-bottom: -30px;
+	
+			hr{
+			
+				visibility: hidden;
+			
+		}
+		}
+		a {
+			p {
+				color: $black	
+
+			}
+
+			.small {
+				color: $gray
+			}
+			
+	}
+		
+	}
 
 .btn  {
 	display: inline-block;

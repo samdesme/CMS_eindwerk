@@ -9,7 +9,7 @@
   </div>
   
   <div *ngIf="profiles && user && strSearch != ''" class="columns is-mobile is-centered">
-    <div class="column userList is-three-quarters-mobile is-two-thirds-tablet is-half-desktop is-one-third-widescreen is-one-third-fullhd ">
+    <div class="column searchList is-three-quarters-mobile is-two-thirds-tablet is-half-desktop is-one-third-widescreen is-one-third-fullhd ">
       <div class="listItem" *ngFor="let profile of profiles | orderBy:'attributes.distance':false">
         <div *ngIf="profile.username.toUpperCase().indexOf(strSearch.toUpperCase()) > -1;">
             <a  routerLink="/map/profile/{{profile.id}}">

@@ -29,7 +29,6 @@ $url_1: url(../../../assets/fonts/AvenirNextLTPro-Demi.otf);
 	color: $black;
 	background: $white;
 	margin-top: 40px;
-	//Instead of the line below you could use @include box-shadow($shadow-1, $shadow-2, $shadow-3, $shadow-4, $shadow-5, $shadow-6, $shadow-7, $shadow-8, $shadow-9, $shadow-10)
 	box-shadow: 3px 3px 6px $black_16;
 	position: relative;
 }

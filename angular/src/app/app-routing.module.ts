@@ -16,7 +16,8 @@ import { MapComponent } from './components/map/map.component';
 import { ProfileShowComponent } from './components/map/show/profile-show.component';
 import { ProfileSearchComponent } from './components/map/search/profile-search.component';
 import { RequestsComponent } from './components/map/requests/requests.component';
-
+import { ToolsComponent } from './components/tips_tools/tools/tools.component';
+import { TipsComponent } from './components/tips_tools/tips/tips.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/profile', pathMatch: 'full' },
@@ -34,6 +35,8 @@ const routes: Routes = [
   { path: 'map/profile/:id', component: ProfileShowComponent },
   { path: 'map/search', component: ProfileSearchComponent },
   { path: 'map/requests', component: RequestsComponent },
+  { path: 'tipstools/tools', component: ToolsComponent },
+  { path: 'tipstools/tips', component: TipsComponent },
 
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },

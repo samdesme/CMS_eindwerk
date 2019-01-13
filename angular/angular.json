@@ -9,6 +9,7 @@
       "projectType": "application",
       "prefix": "app",
       "schematics": {},
+      
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
