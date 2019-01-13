@@ -14,6 +14,8 @@ import { EntryCreateComponent } from './components/track/entry-create/entry-crea
 import { EntryEditComponent } from './components/track/entry-edit/entry-edit.component';
 import { MapComponent } from './components/map/map.component';
 import { ProfileShowComponent } from './components/map/show/profile-show.component';
+import { ProfileSearchComponent } from './components/map/search/profile-search.component';
+import { RequestsComponent } from './components/map/requests/requests.component';
 
 
 const routes: Routes = [
@@ -30,6 +32,8 @@ const routes: Routes = [
   { path: 'track/edit/:id', component: EntryEditComponent },
   { path: 'map', component: MapComponent },
   { path: 'map/profile/:id', component: ProfileShowComponent },
+  { path: 'map/search', component: ProfileSearchComponent },
+  { path: 'map/requests', component: RequestsComponent },
 
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },

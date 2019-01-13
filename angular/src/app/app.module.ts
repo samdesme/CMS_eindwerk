@@ -14,6 +14,8 @@ import { EntryEditComponent } from './components/track/entry-edit/entry-edit.com
 import { StatsComponent } from './components/track/stats/stats.component';
 import { MapComponent } from './components/map/map.component';
 import { ProfileShowComponent } from './components/map/show/profile-show.component';
+import { ProfileSearchComponent } from './components/map/search/profile-search.component';
+import { RequestsComponent } from './components/map/requests/requests.component';
 
 import { StarRatingModule } from 'angular-star-rating';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -45,7 +47,9 @@ import { OrderModule } from 'ngx-order-pipe';
     EntryEditComponent,
     StatsComponent,
     MapComponent,
-    ProfileShowComponent
+    ProfileShowComponent,
+    ProfileSearchComponent,
+    RequestsComponent
   ],
   imports: [
     BrowserModule,

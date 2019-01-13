@@ -3,6 +3,8 @@ $black: #000000;
 $white: #ffffff;
 $black_16: rgba(0, 0, 0, 0.16);
 $purple: #876bd1;
+$purple_op6: rgba(135,107,209, 0.6);
+
 $gray_op10: rgba(10,10,10,.1);
 
 $gray: rgb(155, 155, 155);
@@ -52,9 +54,10 @@ $url_2: url(../../../assets/fonts/Avenir-Medium.ttf);
 }
 
 .userList {
+	position: relative;
 	min-height: 250px;
 	background: $white;
-	padding: 15px 15px 0px;
+	padding: 15px 15px 60px;
 	margin-bottom: 80px;
 	box-shadow: 3px 3px 6px $black_16;
 
@@ -63,12 +66,12 @@ $url_2: url(../../../assets/fonts/Avenir-Medium.ttf);
 		margin-top: 30px;
 		position: relative;
 		
-		hr{
+		/* hr{
 			&:last-child{
 				display: block;
 				margin-bottom: 0px
 			}
-		}
+		} */
 
 	}
 
@@ -119,6 +122,77 @@ $url_2: url(../../../assets/fonts/Avenir-Medium.ttf);
 		border-radius: 50%;
 	
 	
+	}
+}
+
+.btnPrimary {
+	font-family: $font_1;
+	border: none;
+	color: $white;
+	width: 200px;
+	height: 50px;
+	padding: 12px 0px;
+	box-shadow: 0px 3px 6px $black_16;
+	display: block;
+	background: linear-gradient(to right, $purple , $purple_op6);;
+	position: absolute;
+	bottom: 15px;
+	left: 0;
+	right: 0;
+	font-size: 1em;
+	margin: auto;
+	
+	&:hover{
+		color: $white;
+
+	}
+}
+
+.btnNotification {
+	font-family: $font_1;
+	color: $purple;
+	width: 50px;
+	height: 50px;
+	text-align: center;
+	//box-shadow: 0px 3px 6px $black_16;
+	border: 3px solid $purple;
+	border-radius: 25px;
+	display: block;
+	background: $white;
+	position: absolute;
+	bottom: 15px;
+	right: 15px;
+	font-size: 1.6em;
+	padding: 6px;
+
+
+	&:hover{
+		color: $purple;
+
+	}
+}
+
+.btnNotificationInactive {
+	font-family: $font_1;
+	color: $gray;
+	width: 50px;
+	height: 50px;
+	text-align: center;
+	//box-shadow: 0px 3px 6px $black_16;
+	border: 3px solid $gray;
+	border-radius: 25px;
+	display: block;
+	background: $white;
+	position: absolute;
+	bottom: 15px;
+	right: 15px;
+	font-size: 1.6em;
+	padding: 6px;
+
+
+	&:hover{
+		color: $gray;
+
 	}
 }
 

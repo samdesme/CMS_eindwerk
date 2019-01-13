@@ -3,6 +3,9 @@ import { ProfileImg } from './profile_picture';
 
 export class Profile {
   id: string;
+  profile_id: number;
+  friend: boolean;
+  requested: boolean;
   type = 'profile--user';
   attributes: Attributes;
   username: String;

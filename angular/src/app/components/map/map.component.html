@@ -14,19 +14,17 @@
 
           </ng-template>
         </agm-info-window>
-
       </agm-marker>
-
     </agm-map>
-
   </div>
 </div>
 
 <div *ngIf="profiles && user" class="columns is-mobile is-centered">
   <div class="column userList is-three-quarters-mobile is-two-thirds-tablet is-half-desktop is-one-third-widescreen is-one-third-fullhd ">
-    <p class="small">In de buurt</p>
+    <p class="small">Mijn vrienden</p>
     <div *ngFor="let profile of profiles | orderBy:'attributes.distance':false">
-      <a class="listItem" routerLink="/map/profile/{{profile.id}}">
+
+      <a *ngIf="profile.friend == true" class="listItem" routerLink="/map/profile/{{profile.id}}">
         <div *ngIf="profile.profile_img;else placeholder" class="avatarThumb">
 
           <figure [ngStyle]="{ 'background-image': 'url(' + 'http://localhost:8888' + profile.profile_img.attributes.uri.url + ')'}">
@@ -41,14 +39,20 @@
         </ng-template>
         <hr>
       </a>
+
     </div>
-
+    <a routerLink="/map/search" class="button is-outlined is-rounded is-medium btnPrimary">ZOEK</a>
+    <a *ngIf="nNotifications > 0;else noRequests" routerLink="/map/requests" class="btnNotification"><i class="fas fa-envelope"></i></a>
   </div>
-
 
 </div>
 
 <app-nav [navTemplate]="navTemplate"></app-nav>
+
+<ng-template #noRequests>
+    <a class="btnNotificationInactive"><i class="fas fa-envelope"></i></a>
+
+</ng-template>
 
 <ng-template #placeholder>
   <div class="avatarThumb">

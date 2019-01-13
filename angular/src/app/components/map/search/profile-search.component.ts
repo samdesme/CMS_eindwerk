@@ -1,38 +1,38 @@
 import { Component, OnInit, ViewChild, TemplateRef, ViewEncapsulation } from '@angular/core';
-import { Profile } from '../../models/profile';
-import { User } from '../../models/user';
-import { Entry } from '../../models/entry';
+import { Profile } from '../../../models/profile';
+import { Friends } from '../../../models/friends';
 
-import { ProfileService } from '../../services/profile.service';
-import { UserService } from '../../services/user.service';
-import { EntryService } from "../../services/entry.service";
+import { User } from '../../../models/user';
+import { Entry } from '../../../models/entry';
 
-import { JsonObject } from '../../models/json';
+import { ProfileService } from '../../../services/profile.service';
+import { UserService } from '../../../services/user.service';
+import { EntryService } from "../../../services/entry.service";
+
+import { JsonObject } from '../../../models/json';
 import { Router } from '@angular/router';
-import { ProfileImg } from '../../models/profile_picture';
+import { ProfileImg } from '../../../models/profile_picture';
 import { HttpParams, HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 import { DatePipe } from '@angular/common'
 
 
 @Component({
-  selector: 'app-map',
-  templateUrl: './map.component.html',
-  styleUrls: ['./map.component.scss'],
+  selector: 'app-profile-search',
+  templateUrl: './profile-search.component.html',
+  styleUrls: ['./profile-search.component.scss'],
   encapsulation: ViewEncapsulation.None
 
 
 })
-export class MapComponent implements OnInit {
+export class ProfileSearchComponent implements OnInit {
   public profile: Profile;
   public profiles: Profile[];
-  public requests: Profile[];
-
   public user: User[];
   public entries: Entry[];
+  public friends: Friends[];
 
   friendsObj: Object;
-
   lat: number;
   lng: number;
 
@@ -41,17 +41,11 @@ export class MapComponent implements OnInit {
 
   profile_id: string;
   profile_uid: string;
-  nNotifications: number;
-
   datepipe: DatePipe = new DatePipe('en-US');
 
   bool: Boolean;
+  strSearch: String = '';
   location = {};
-
-
-
-  @ViewChild('navTemplate', { read: TemplateRef }) navTemplate: TemplateRef<any>;
-
 
   constructor(
     private userService: UserService,
@@ -62,16 +56,18 @@ export class MapComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-
     if (localStorage.access_token) {
-      console.log(this.id)
+      console.log("id",this.id)
 
       this.bool = true;
       this.getUser();
+
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(this.setPosition.bind(this));
+      };
+
       this.getProfile();
-      this.getRequests()
-
-
+   //   this.getAllProfiles();
 
 
     }
@@ -85,14 +81,72 @@ export class MapComponent implements OnInit {
     window.location.reload();
   }
 
+  onSearchChange(searchValue : string ) {  
+    this.strSearch = searchValue;
+    console.log(searchValue);
+  }
+    
+  showUser(id, username, req, fr) {  
+
+    console.log(id, username, req, fr);
+  }
+
   setPosition(position) {
     this.location = position.coords;
     this.lng = this.location["longitude"]
     this.lat = this.location["latitude"]
 
+    //this.setGeoProfile(this.lat, this.lng)
+  }
+
+public sendRequest(id:string, profileId:number, $ev) {
+
+let obj = this.profiles.find(x => x.id == id);
+obj.requested = true
+
+     this.http.get<JsonObject>(`http://localhost:8888/profile/${this.profile_id}?_format=json`)
+    .subscribe(event => {
+
+   
+      const httpOptionsPatch = {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+          'Authorization': localStorage.getItem("access_token")
+        })
+      };
+  
+      this.friends = event["field_friends"];
+
+   let body: any =
+      { 
+        type: "user",
+        field_friends: [
+          {
+            target_id: profileId,
+            target_type: "profile",
+            target_uuid: id,
+            url: "/profile/" + profileId
+          }
+        ],
+      }
+
+      for (var o in event["field_friends"]) {
+        body.field_friends.push(event["field_friends"][o])
+      }
+      console.log(body)
+
+  
+      this.http.patch(`http://localhost:8888/profile/${this.profile_id}?_format=json`, body, httpOptionsPatch)
+        .subscribe(event => {
+
+          
+          this.refresh_token();
+          console.log(event);
+        }); 
 
 
-    this.setGeoProfile(this.lat, this.lng)
+
+    }); 
   }
 
   public async getUser(): Promise<void> {
@@ -141,13 +195,8 @@ export class MapComponent implements OnInit {
           this.profile_id = event.data[0]["attributes"]["drupal_internal__profile_id"];
           this.profile_uid = event.data[0]["id"]
 
-          if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(this.setPosition.bind(this));
-          };
           this.friendsObj = event.data[0]["relationships"]["field_friends"]["data"];
-          this.getFriends(this.profile_uid);
-          this.getRequests();
-
+          this.getAllProfiles()
 
         });
 
@@ -157,14 +206,13 @@ export class MapComponent implements OnInit {
   }
 
 
-  public async getFriends(id: string): Promise<void> {
 
-    let params = new HttpParams();
-    params = params.append('filter[field_friends.id]', id);
+  public async getAllProfiles(): Promise<void> {
 
     try {
 
-      await this.http.get<JsonObject>('http://localhost:8888/jsonapi/profile/user', { params: params })
+  
+      await this.http.get<JsonObject>('http://localhost:8888/jsonapi/profile/user')
         .subscribe(event => {
 
           this.profiles = event.data;
@@ -172,31 +220,44 @@ export class MapComponent implements OnInit {
 
             let uid = event.data[i]["relationships"]["uid"]["data"]["id"];
             let id = event.data[i]["id"];
+            let profile_id = event.data[i]["attributes"]["drupal_internal__profile_id"]
+
 
             this.http.get<JsonObject>(`http://localhost:8888/jsonapi/user/user/${uid}`)
               .subscribe(event => {
 
                 this.profiles[i].username = event.data["attributes"]["name"]
- 
+
               })
 
             this.http.get<JsonObject>(`http://localhost:8888/jsonapi/profile/user/${id}/field_profile_picture`)
               .subscribe(event => {
                 this.profiles[i].profile_img = event.data
+                console.log(event.data);
 
               })
 
-             for (let f in this.friendsObj) {
 
+            this.profiles[i].attributes.distance = Number(this.calcDistance(this.lat, this.lng, this.profiles[i].attributes.field_lat, this.profiles[i].attributes.field_lng, "K").toFixed(1))
+            this.profiles[i].profile_id = profile_id;
+            this.profiles[i].requested = false;
+            this.profiles[i].friend = false;
+
+
+
+            for (let f in this.friendsObj) {
+
+              console.log(this.profiles[i].id, " == ", this.friendsObj[f]["id"])
               if (this.profiles[i].id == this.friendsObj[f]["id"]) {
 
                 this.profiles[i].requested = true;
 
                 for (let o in event.data[i]["relationships"]["field_friends"]["data"]) {
-
+                  console.log(event.data[i]["relationships"]["field_friends"]["data"][o]["id"])
                     if (this.profile_uid == event.data[i]["relationships"]["field_friends"]["data"][o]["id"]) {
-
+                      
                       this.profiles[i].friend = true;
+                      this.profiles[i].requested = false;
       
                     }
                 }
@@ -204,76 +265,12 @@ export class MapComponent implements OnInit {
               }
 
              
-            } 
-       
-
-            this.profiles[i].attributes.distance = Number(this.calcDistance(this.lat, this.lng, this.profiles[i].attributes.field_lat, this.profiles[i].attributes.field_lng, "K").toFixed(1))
+            }
             console.log(this.profiles[i])
 
           }
 
         });
-
-
-
-
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  public async getRequests(): Promise<void> {
-
-    let params = new HttpParams();
-    params = params.append('filter[field_friends.id]', this.profile_uid);
-
-    try {
-
-      await this.http.get<JsonObject>('http://localhost:8888/jsonapi/profile/user', { params: params })
-        .subscribe(event => {
-
-          this.requests = event.data;
-          for (let i = 0; i < event.data.length; i++) {
-
-            let uid = event.data[i]["relationships"]["uid"]["data"]["id"];
-            let id = event.data[i]["id"];
-            let profile_id = event.data[i]["attributes"]["drupal_internal__profile_id"]
-
-            this.http.get<JsonObject>(`http://localhost:8888/jsonapi/user/user/${uid}`)
-              .subscribe(event => {
-
-                this.requests[i].username = event.data["attributes"]["name"]
-
-              })
-
-            this.http.get<JsonObject>(`http://localhost:8888/jsonapi/profile/user/${id}/field_profile_picture`)
-              .subscribe(event => {
-                this.requests[i].profile_img = event.data
-
-              })
-
-            for (let f in this.friendsObj) {
-              if (this.requests[i].id == this.friendsObj[f]["id"]) {
-
-                this.requests[i].friend = true;
-
-              }
-
-            }
-
-
-            this.requests[i].profile_id = profile_id;
-            this.requests[i].attributes.distance = Number(this.calcDistance(this.lat, this.lng, this.requests[i].attributes.field_lat, this.requests[i].attributes.field_lng, "K").toFixed(1))
-            
-            
-          }
-
-          let obj = this.requests.filter(book => book.friend !== true && book.requested !== true);
-          this.nNotifications = obj.length;
-
-        });
-
-       
 
 
     } catch (error) {
