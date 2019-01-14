@@ -12,7 +12,6 @@ import { HttpParams, HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 import { DatePipe } from '@angular/common'
 
-
 @Component({
   selector: 'app-entries',
   templateUrl: './entries.component.html',
@@ -86,7 +85,11 @@ export class EntryComponent implements OnInit {
         let dateEntry = new Date(res.data[i]['attributes']['field_created']);
         let dateToday = new Date();
 
-        if (dateEntry.getDay() == dateToday.getDay()) {
+        let dateFormatEntry = this.datepipe.transform(dateEntry, 'yyyy-MM-dd');
+        let dateFormatToday = this.datepipe.transform(dateToday, 'yyyy-MM-dd');
+
+
+        if (dateFormatEntry == dateFormatToday) {
           this.bool = false;
         }
 

@@ -42,6 +42,47 @@ $url_2: url(../../../assets/fonts/Avenir-Medium.ttf);
 	margin-bottom: 40px;
 	box-shadow: 3px 3px 6px $black_16;
 	position: relative;
+
+
+	.info { 
+		margin-bottom: 20px;
+	
+		div {
+			display: inline-block;
+			width: 50%;
+	
+			p {
+				font-family: $font_2
+			}
+	
+			label {
+				display: inline-block;
+				width: 100%
+			}
+		}
+		p {
+			margin-bottom: 15px;
+		}
+	
+		span {
+			color: $purple
+	
+	}
+	}
+	
+	.rating { 
+		display: inline-block;
+		margin-bottom: 15px;
+	
+	
+		i {
+			display: inline-block;
+			width: 50px;
+			
+			
+		}
+		
+	}
 }
 
 .entryWrap {
@@ -119,50 +160,11 @@ $url_2: url(../../../assets/fonts/Avenir-Medium.ttf);
 
 }
 
-.info { 
-	margin-bottom: 20px;
 
-	div {
-		display: inline-block;
-		width: 50%;
-
-		p {
-			font-family: $font_2
-		}
-
-		label {
-			display: inline-block;
-			width: 100%
-		}
-	}
-	p {
-		margin-bottom: 15px;
-	}
-
-	span {
-		color: $purple
-
-}
-}
-
-.rating { 
-	display: inline-block;
-	margin-bottom: 15px;
-
-
-	i {
-		display: inline-block;
-		width: 50px;
-		
-		
-	}
-	
-}
 
 
 
 .icon {
 	color: $gray;
 	font-size: 20px;
-	
 }

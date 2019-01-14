@@ -40,12 +40,16 @@ $url_2: url(assets/fonts/Avenir-Medium.ttf);
 
 html,body {  
   font-family: 'Avenir Next Reg', 'Open Sans', serif;
-  position: relative;
-  height: auto;
-  min-height: 100% !important;
   background-image: linear-gradient(#876BD1, #648ED0);
   padding-top: 50px
 }
+
+html {
+	height: 100%;
+  }
+  body {
+	min-height: 100%;
+  }
 
 /* Styles for tab labels */
 .mat-tab-label {

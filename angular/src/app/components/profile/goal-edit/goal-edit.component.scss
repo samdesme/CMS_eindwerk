@@ -24,6 +24,8 @@ $url_1: url(../../../../assets/fonts/AvenirNextLTPro-Demi.otf);
 	font-family: $font_1;
 	src: $url_1 format("truetype");
 }
+
+
 .column {
 	min-height: 200px;
 	color: $black;
@@ -34,11 +36,10 @@ $url_1: url(../../../../assets/fonts/AvenirNextLTPro-Demi.otf);
 	
 }
 
-
-
-.form{
+.form {
 	margin-bottom: 100px;
 }
+
 .btnCreate {
 	font-family: $font_1;
 	border: solid 3px $purple;
@@ -67,7 +68,6 @@ $url_1: url(../../../../assets/fonts/AvenirNextLTPro-Demi.otf);
 	
 	}
 }
-  
 
 	input[type=text] {
 		width: 100px;
