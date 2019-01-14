@@ -18,6 +18,9 @@ import { ProfileSearchComponent } from './components/map/search/profile-search.c
 import { RequestsComponent } from './components/map/requests/requests.component';
 import { ToolsComponent } from './components/tips_tools/tools/tools.component';
 import { TipsComponent } from './components/tips_tools/tips/tips.component';
+import { PostsComponent } from './components/posts/posts.component';
+import { PostCreateComponent } from './components/posts/post-create/post-create.component';
+import { PostEditComponent } from './components/posts/post-edit/post-edit.component';
 
 import { StarRatingModule } from 'angular-star-rating';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
@@ -53,7 +56,10 @@ import { OrderModule } from 'ngx-order-pipe';
     ProfileSearchComponent,
     RequestsComponent,
     ToolsComponent,
-    TipsComponent
+    TipsComponent,
+    PostsComponent,
+    PostCreateComponent,
+    PostEditComponent
   ],
   imports: [
     BrowserModule,

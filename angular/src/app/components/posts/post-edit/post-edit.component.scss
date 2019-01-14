@@ -1,3 +1,5 @@
+@import '~css-star-rating/scss/star-rating';
+
 //colors
 $black: #000000;
 $white: #ffffff;
@@ -9,11 +11,13 @@ $red: #A33434;
 //fonts
 $font_0: Avenir Next Reg;
 $font_1: Avenir Next Dem;
+$font_2: Avenir Next Med;
 
 
 //urls
 $url_0: url(../../../../assets/fonts/AvenirNextLTPro-Regular.otf);
 $url_1: url(../../../../assets/fonts/AvenirNextLTPro-Demi.otf);
+$url_2: url(../../../../assets/fonts/Avenir-Medium.ttf);
 
 
 @font-face {
@@ -24,6 +28,11 @@ $url_1: url(../../../../assets/fonts/AvenirNextLTPro-Demi.otf);
 	font-family: $font_1;
 	src: $url_1 format("truetype");
 }
+@font-face {
+	font-family: $font_2;
+	src: $url_2 format("truetype");
+}
+
 .column {
 	min-height: 200px;
 	color: $black;
@@ -34,11 +43,22 @@ $url_1: url(../../../../assets/fonts/AvenirNextLTPro-Demi.otf);
 	
 }
 
-
-
 .form{
-	margin-bottom: 100px;
+	margin-bottom: 50px;
+
+	.field:first-of-type{
+		margin-bottom: 40px;
+	
+	}
 }
+.lblImg{
+	display: block;
+	position: absolute;
+	left: 0;
+}
+
+
+
 .btnCreate {
 	font-family: $font_1;
 	border: solid 3px $purple;
@@ -55,11 +75,51 @@ $url_1: url(../../../../assets/fonts/AvenirNextLTPro-Demi.otf);
 	margin: auto;
 }
 
-#upload_button {
+
+.postImg {
+	margin-top: 15px;
+	margin-bottom: 25px;
+
+	position: relative;
+	width: 100%;
+	height: 300px;
+	overflow: hidden;
+
+  }
+  .postImg img {
+	width:100%;
+	height:100%;
+	object-position: center;
+	object-fit: cover;
+
+  }
+
+.control{
+		textarea {
+			padding: 10px;
+			display: block;
+			border: 1px solid $black_16;
+			border-radius: 10px;
+			height: 100px;
+			width: 100%;
+		}
+
+		input[type=text] {
+			border: 1px solid $black_16;
+			border-radius: 10px;
+			}
+
+}
+  
+#uploadPostBtn {
 	a {
 		font-family: $font_1;
 		font-size: 0.8em;
 		display: inline-block;
+		position: absolute;
+		right: 15px;
+		top: 15px;
+
 		width: 120px;
 		height: 35px;
 		text-align: center;
@@ -82,10 +142,9 @@ $url_1: url(../../../../assets/fonts/AvenirNextLTPro-Demi.otf);
   }
   
 
-  .valMessage {
+.valMessage {
 	  font-family: $font_1;
 	  text-align: center;
 	  padding-top: 15px;
 	  color: $red;
   }
-

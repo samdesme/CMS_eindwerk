@@ -3,7 +3,7 @@ import { Profile, Attributes } from '../../../models/profile';
 import { User } from '../../../models/user';
 
 import { ProfileImg, ImgAttributes } from '../../../models/profile_picture';
-import { NewFile } from '../../../models/file';
+import { GenericFile } from '../../../models/file';
 
 import { ProfileService } from './../../../services/profile.service';
 import { AuthService } from './../../../services/auth.service';
@@ -28,7 +28,7 @@ export class ProfileEditComponent implements OnInit {
   public newProfile_picture: ProfileImg;
 
   public newProfile: Profile;
-  public newFile: NewFile;
+  public newFile: GenericFile;
 
   fileName: string = '';
   msg: string = '';
@@ -126,7 +126,7 @@ export class ProfileEditComponent implements OnInit {
         })
       };
 
-      this.http.post<NewFile>('http://localhost:8888/file/upload/profile/user/field_profile_picture?_format=json', this.selectedFile, httpOptions)
+      this.http.post<GenericFile>('http://localhost:8888/file/upload/profile/user/field_profile_picture?_format=json', this.selectedFile, httpOptions)
         .subscribe(event => {
           uuid = event.fid[0]["value"];
 
